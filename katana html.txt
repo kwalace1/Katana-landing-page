@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Katana — Coming Soon</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #0b0b0f;
+      color: #ffffff;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+    }
+
+    .container {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 72px 28px 100px;
+      text-align: center;
+    }
+
+    .container > p,
+    .cta-note,
+    .section p {
+      max-width: min(34rem, 100%);
+      margin-inline: auto;
+    }
+
+    .brand {
+      margin-bottom: 0;
+    }
+
+    .brand h1 {
+      font-size: clamp(40px, 8vw, 56px);
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      margin: 0 0 10px;
+      color: #ffffff;
+      text-transform: uppercase;
+    }
+
+    .brand .tagline {
+      margin: 0;
+      font-size: clamp(12px, 2.2vw, 14px);
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #84849a;
+      line-height: 1.4;
+    }
+
+    .section h2 {
+      margin: 0 0 22px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: clamp(24px, 4.5vw, 31px);
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      color: #ffffff;
+      line-height: 1.18;
+    }
+
+    p {
+      color: #868799;
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.72;
+      margin: 14px 0 0;
+    }
+
+    .cta {
+      margin-top: 36px;
+    }
+
+    .cta-note {
+      margin-top: 18px;
+      font-size: 14px;
+      font-weight: 400;
+      color: #6c6d7a;
+      line-height: 1.55;
+    }
+
+    input {
+      padding: 14px 16px;
+      width: min(100%, 320px);
+      max-width: 100%;
+      border: 1px solid #2a2a34;
+      background: #12121a;
+      color: #fff;
+      border-radius: 10px;
+      margin: 0 8px 12px 0;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+
+    input::placeholder {
+      color: #666;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #6c5cff;
+      box-shadow: 0 0 0 3px rgba(108, 92, 255, 0.25);
+    }
+
+    button {
+      padding: 14px 22px;
+      border: none;
+      background: #6c5cff;
+      color: white;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 15px;
+    }
+
+    button:hover {
+      background: #7d6fff;
+    }
+
+    #join:target button {
+      background: #8f84ff;
+      box-shadow:
+        0 0 0 3px rgba(108, 92, 255, 0.85),
+        0 0 28px rgba(108, 92, 255, 0.45);
+      animation: join-cta-ring 1.6s ease-out 1;
+    }
+
+    @keyframes join-cta-ring {
+      0% {
+        box-shadow:
+          0 0 0 0 rgba(108, 92, 255, 0.9),
+          0 0 0 rgba(108, 92, 255, 0.5);
+      }
+      40% {
+        box-shadow:
+          0 0 0 4px rgba(108, 92, 255, 0.55),
+          0 0 36px rgba(108, 92, 255, 0.55);
+      }
+      100% {
+        box-shadow:
+          0 0 0 3px rgba(108, 92, 255, 0.85),
+          0 0 28px rgba(108, 92, 255, 0.45);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      #join:target button {
+        animation: none;
+      }
+    }
+
+    .section {
+      margin-top: 56px;
+    }
+
+    .section p {
+      text-align: center;
+      text-wrap: pretty;
+    }
+
+    @supports (text-wrap: balance) {
+      .container > p,
+      .cta-note,
+      .section p {
+        text-wrap: balance;
+      }
+    }
+
+    .section h2 + p {
+      margin-top: 0;
+    }
+
+    .section p a {
+      color: #babaca;
+      font-weight: 600;
+      text-decoration: underline;
+      text-decoration-color: rgba(108, 92, 255, 0.5);
+      text-underline-offset: 3px;
+    }
+
+    .section p a:hover {
+      color: #f0f0f8;
+      text-decoration-color: rgba(108, 92, 255, 0.95);
+    }
+
+    .small {
+      font-size: 14px;
+      font-weight: 400;
+      color: #6e6f7e;
+      margin-top: 12px;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header class="brand">
+      <h1>Katana</h1>
+      <p class="tagline">The Cutting Edge of Business Ops</p>
+    </header>
+
+    <p>Replace your patchwork of tools with one unified system<br>built for scaling startups.</p>
+    <p class="small">From project management to HR,<br>Katana centralizes your operations and automates the busywork with AI.</p>
+
+    <div class="cta" id="join">
+      <input type="email" placeholder="Enter your email" aria-label="Email address">
+      <button type="button">Join Katana Early</button>
+    </div>
+    <p class="cta-note">We're currently running pilots—<br>share your email for updates on openings and timing.</p>
+
+    <div class="section">
+      <h2>Your business runs on too many tools.</h2>
+      <p>As your company grows, so does your tech stack—<br>project management in one place, CRM in another, HR somewhere else.</p>
+      <p>It's expensive, fragmented, and inefficient.</p>
+      <p>Katana replaces that complexity with a single, connected system.</p>
+    </div>
+
+    <div class="section">
+      <h2>Why Katana</h2>
+      <p>Replace multiple subscriptions with one platform<br>and a clearer view of spend as you scale.</p>
+      <p>Stop bouncing between apps—<br>your team stays in one workflow instead of hunting for the right tab.</p>
+      <p>Automation and AI handle the repetitive ops work<br>so people can focus on decisions that matter.</p>
+      <p>Real-time sync keeps everyone aligned<br>on the same numbers, schedules, and customer context.</p>
+    </div>
+
+    <div class="section">
+      <h2>Everything your business needs</h2>
+      <p>Katana brings together project management, CRM, inventory, workforce management, and HR in one place—<br>so capabilities stay connected instead of siloed.</p>
+      <p>No more stitching tools together;<br>data and workflows flow between teams without copy-paste or manual reconciliation.</p>
+    </div>
+
+    <div class="section">
+      <h2>Be first to experience Katana</h2>
+      <p><a href="#join">Join early</a> to get priority access,<br>influence development, and unlock customization options.</p>
+    </div>
+
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,1716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Katana — Business Operating System</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    :root {
+      --top-bar-height: 84px;
+      --text-heading: #ffffff;
+      --text-body: #a4a6b8;
+      --text-muted: #808393;
+      --text-body-size: clamp(0.875rem, 0.82rem + 0.28vw, 1rem);
+      --text-body-line: 1.55;
+      --text-prose-max: 34rem;
+      --heading-line: 1.08;
+      --heading-weight: 800;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      height: 100%;
+      overflow-x: hidden;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100%;
+      min-height: 100vh;
+      min-height: 100dvh;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background-color: #0b0b0f;
+      color: #ffffff;
+      font-size: clamp(0.875rem, 0.82rem + 0.35vw, 1.0625rem);
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+      isolation: isolate;
+    }
+
+    .page-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse 90% 55% at 50% -8%, rgba(108, 92, 255, 0.09), transparent 58%),
+        radial-gradient(ellipse 50% 40% at 100% 35%, rgba(64, 100, 220, 0.05), transparent 52%),
+        radial-gradient(ellipse 42% 38% at 0% 72%, rgba(108, 92, 255, 0.04), transparent 50%),
+        linear-gradient(180deg, #0d0e15 0%, #0b0b0f 42%, #0a0c13 100%);
+    }
+
+    .page-backdrop::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      opacity: 0.4;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.022) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.022) 1px, transparent 1px);
+      background-size: 56px 56px;
+      mask-image: linear-gradient(180deg, #000 0%, #000 78%, transparent 100%);
+    }
+
+    .page-backdrop::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      opacity: 0.035;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+      background-size: 128px 128px;
+    }
+
+    .page-backdrop__orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      will-change: transform;
+    }
+
+    .page-backdrop__orb--hero {
+      width: min(480px, 72vw);
+      height: min(360px, 48vh);
+      top: 6%;
+      left: 62%;
+      transform: translateX(-45%);
+      background: rgba(108, 92, 255, 0.14);
+      opacity: 0.55;
+    }
+
+    .page-backdrop__orb--mid {
+      width: min(400px, 55vw);
+      height: min(320px, 40vh);
+      top: 48%;
+      left: -8%;
+      background: rgba(72, 118, 255, 0.1);
+      opacity: 0.45;
+    }
+
+    .page-backdrop__orb--low {
+      width: min(440px, 60vw);
+      height: min(280px, 36vh);
+      bottom: 4%;
+      right: -6%;
+      background: rgba(108, 92, 255, 0.1);
+      opacity: 0.4;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .page-backdrop__orb {
+        filter: blur(64px);
+      }
+    }
+
+    .top-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      min-height: 72px;
+      padding: 16px clamp(16px, 5vw, 96px);
+      background: rgba(11, 11, 15, 0.72);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      box-shadow: none;
+      transition:
+        background-color 220ms ease,
+        border-color 220ms ease,
+        box-shadow 220ms ease,
+        backdrop-filter 220ms ease;
+    }
+
+    .top-bar.is-scrolled {
+      background: rgba(11, 11, 15, 0.9);
+      backdrop-filter: blur(22px);
+      -webkit-backdrop-filter: blur(22px);
+      border-bottom-color: rgba(108, 92, 255, 0.28);
+      box-shadow:
+        0 1px 0 rgba(143, 132, 255, 0.4),
+        0 10px 36px rgba(0, 0, 0, 0.38);
+    }
+
+    .top-bar-brand {
+      display: flex;
+      align-items: center;
+      min-width: 0;
+      flex-shrink: 1;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .top-bar-logo {
+      display: block;
+      height: clamp(40px, 5.5vw, 56px);
+      width: auto;
+      max-width: min(42vw, 420px);
+      object-fit: contain;
+      object-position: left center;
+    }
+
+    .top-bar-nav {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: clamp(8px, 1.8vw, 16px);
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+
+    .top-bar-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 14px;
+      border-radius: 9px;
+      color: #b8bbcb;
+      font-size: clamp(0.85rem, 0.78rem + 0.22vw, 1rem);
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      text-decoration: none;
+      white-space: nowrap;
+      transition:
+        background-color 160ms ease,
+        color 160ms ease,
+        transform 160ms ease,
+        box-shadow 160ms ease;
+    }
+
+    .top-bar-link:hover {
+      color: #f0f1f8;
+      background: rgba(255, 255, 255, 0.08);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.22);
+    }
+
+    .top-bar-link:focus-visible {
+      outline: 2px solid #8f84ff;
+      outline-offset: 2px;
+    }
+
+    .top-bar-link.is-active {
+      color: #ffffff;
+      background: rgba(108, 92, 255, 0.38);
+      box-shadow:
+        inset 0 0 0 1px rgba(143, 132, 255, 0.75),
+        0 0 22px rgba(108, 92, 255, 0.28);
+    }
+
+    .top-bar-link.is-active:hover {
+      transform: translateY(-1px);
+      background: rgba(108, 92, 255, 0.44);
+    }
+
+    .top-bar-button {
+      flex-shrink: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 18px;
+      border: none;
+      background: #6c5cff;
+      color: #fff;
+      border-radius: 10px;
+      cursor: pointer;
+      font-family: inherit;
+      font-weight: 600;
+      font-size: clamp(14px, 2.8vw, 15px);
+      text-decoration: none;
+      white-space: nowrap;
+      transition:
+        background-color 160ms ease,
+        transform 160ms ease,
+        box-shadow 160ms ease;
+    }
+
+    .top-bar-button:hover {
+      background: #7d6fff;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 22px rgba(108, 92, 255, 0.38);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .top-bar-link:hover,
+      .top-bar-link.is-active:hover,
+      .top-bar-button:hover {
+        transform: none;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: none;
+      margin: 0 auto;
+      padding:
+        calc(var(--top-bar-height) + clamp(20px, 4vh, 44px))
+        clamp(16px, 5vw, 96px)
+        clamp(48px, 10vh, 100px);
+      text-align: center;
+    }
+
+    .cta-note,
+    .section p {
+      width: 100%;
+      max-width: var(--text-prose-max);
+      margin-inline: auto;
+    }
+
+    .section-kicker {
+      margin: 0;
+      font-size: clamp(0.75rem, 0.6rem + 0.45vw, 0.95rem);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #8a8ca1;
+      font-weight: 600;
+    }
+
+    .section h2 {
+      margin: 0 0 clamp(14px, 3vh, 22px);
+      padding-bottom: clamp(12px, 2vh, 16px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: clamp(1.375rem, 0.85rem + 3.2vw, 2.75rem);
+      font-weight: var(--heading-weight);
+      letter-spacing: -0.04em;
+      color: var(--text-heading);
+      line-height: var(--heading-line);
+    }
+
+    p {
+      color: var(--text-body);
+      font-size: var(--text-body-size);
+      font-weight: 400;
+      line-height: var(--text-body-line);
+      margin: clamp(10px, 2.2vh, 14px) 0 0;
+    }
+
+    .cta {
+      display: flex;
+      flex-wrap: nowrap;
+      justify-content: center;
+      align-items: center;
+      gap: clamp(8px, 1.8vw, 14px);
+      margin-top: clamp(22px, 5vh, 36px);
+      scroll-margin-top: calc(var(--top-bar-height) + 24px);
+    }
+
+    .cta-note {
+      margin-top: clamp(12px, 2.5vh, 18px);
+      max-width: 28rem;
+      font-size: clamp(0.8125rem, 0.76rem + 0.25vw, 0.9375rem);
+      font-weight: 400;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .cta input {
+      flex: 1 1 auto;
+      width: auto;
+      min-width: 0;
+      margin: 0;
+      padding: clamp(11px, 2.2vw, 14px) clamp(12px, 3vw, 18px);
+      border: 1px solid #2a2a34;
+      background: #12121a;
+      color: #fff;
+      border-radius: clamp(8px, 1.5vw, 10px);
+      font-size: max(16px, clamp(0.9375rem, 0.85rem + 0.35vw, 1rem));
+      box-sizing: border-box;
+    }
+
+    .cta input::placeholder {
+      color: #666;
+    }
+
+    .cta input:focus {
+      outline: none;
+      border-color: #6c5cff;
+      box-shadow: 0 0 0 3px rgba(108, 92, 255, 0.25);
+    }
+
+    .cta button {
+      flex: 0 0 auto;
+      white-space: nowrap;
+      padding: clamp(11px, 2.2vw, 14px) clamp(16px, 4vw, 22px);
+      border: none;
+      background: #6c5cff;
+      color: white;
+      border-radius: clamp(8px, 1.5vw, 10px);
+      cursor: pointer;
+      font-weight: 600;
+      font-size: clamp(0.875rem, 0.78rem + 0.4vw, 0.96875rem);
+    }
+
+    .cta button:hover {
+      background: #7d6fff;
+    }
+
+    #join:target button {
+      background: #8f84ff;
+      box-shadow:
+        0 0 0 3px rgba(108, 92, 255, 0.85),
+        0 0 28px rgba(108, 92, 255, 0.45);
+      animation: join-cta-ring 1.6s ease-out 1;
+    }
+
+    @keyframes join-cta-ring {
+      0% {
+        box-shadow:
+          0 0 0 0 rgba(108, 92, 255, 0.9),
+          0 0 0 rgba(108, 92, 255, 0.5);
+      }
+      40% {
+        box-shadow:
+          0 0 0 4px rgba(108, 92, 255, 0.55),
+          0 0 36px rgba(108, 92, 255, 0.55);
+      }
+      100% {
+        box-shadow:
+          0 0 0 3px rgba(108, 92, 255, 0.85),
+          0 0 28px rgba(108, 92, 255, 0.45);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      #join:target button {
+        animation: none;
+      }
+    }
+
+    .section {
+      margin-top: clamp(36px, 8vh, 56px);
+      scroll-margin-top: calc(var(--top-bar-height) + 24px);
+    }
+
+    .section-home {
+      margin-top: 0;
+      padding-bottom: clamp(8px, 2vh, 20px);
+    }
+
+    .home-hero {
+      display: grid;
+      gap: clamp(28px, 4vw, 44px);
+      align-items: center;
+      text-align: center;
+      width: 100%;
+      max-width: min(1320px, 100%);
+      margin-inline: auto;
+    }
+
+    @media (min-width: 900px) {
+      .home-hero {
+        grid-template-columns: minmax(0, 0.78fr) minmax(0, 1.42fr);
+        gap: clamp(36px, 5vw, 60px);
+        text-align: left;
+      }
+    }
+
+    @media (min-width: 1280px) {
+      .home-hero {
+        grid-template-columns: 1fr;
+        gap: clamp(28px, 4vh, 40px);
+        text-align: center;
+      }
+
+      .home-hero-copy {
+        max-width: 40rem;
+        margin-inline: auto;
+      }
+
+      .home-hero-copy .home-hero-subtitle {
+        margin-inline: auto;
+      }
+
+      .home-hero-copy .cta {
+        justify-content: center;
+      }
+
+      .home-hero-copy .cta-note {
+        text-align: center;
+        margin-inline: auto;
+      }
+    }
+
+    .home-hero-title {
+      margin: clamp(10px, 1.8vh, 14px) 0 0;
+      font-size: clamp(1.75rem, 0.95rem + 4vw, 3rem);
+      font-weight: var(--heading-weight);
+      letter-spacing: -0.04em;
+      line-height: var(--heading-line);
+      color: var(--text-heading);
+      text-wrap: balance;
+    }
+
+    .home-hero-subtitle {
+      margin: clamp(12px, 2.2vh, 18px) auto 0;
+      max-width: 28rem;
+      font-size: var(--text-body-size);
+      line-height: var(--text-body-line);
+      color: var(--text-body);
+      text-wrap: pretty;
+    }
+
+    @media (min-width: 900px) {
+      .home-hero-copy .home-hero-subtitle {
+        margin-inline: 0;
+      }
+
+      .home-hero-copy .cta {
+        justify-content: flex-start;
+      }
+
+      .home-hero-copy .cta-note {
+        text-align: left;
+        margin-inline: 0;
+      }
+    }
+
+    .home-hero-copy .cta {
+      margin-top: clamp(18px, 3.5vh, 28px);
+    }
+
+    .home-hero-preview {
+      margin-top: 0;
+      width: 100%;
+      max-width: none;
+      animation: home-preview-float 6s ease-in-out infinite;
+    }
+
+    .home-hero-preview.home-preview {
+      margin-top: 0;
+      width: 100%;
+      max-width: none;
+      border-radius: clamp(12px, 1.5vw, 18px);
+      box-shadow:
+        0 20px 56px rgba(0, 0, 0, 0.42),
+        0 0 0 1px rgba(108, 92, 255, 0.08);
+    }
+
+    @keyframes home-preview-float {
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-6px);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .home-hero-preview {
+        animation: none;
+      }
+    }
+
+    .why-hero {
+      text-align: center;
+      padding-bottom: clamp(12px, 2.5vh, 24px);
+      margin-bottom: clamp(12px, 2.5vh, 20px);
+    }
+
+    .why-hero-content {
+      width: 100%;
+      max-width: min(56rem, 94vw);
+      margin-inline: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: clamp(16px, 3vh, 28px);
+    }
+
+    @media (min-width: 900px) {
+      .why-hero-content {
+        max-width: min(72rem, 90vw);
+      }
+    }
+
+    @media (min-width: 1200px) {
+      .why-hero-content {
+        max-width: min(88rem, 92vw);
+      }
+    }
+
+    .why-hero-content .section-kicker {
+      margin: 0;
+    }
+
+    .why-hero-content h2 {
+      margin: 0;
+      width: 100%;
+      max-width: none;
+    }
+
+    .why-hero-content > p:not(.cta-note) {
+      margin: 0;
+      max-width: none;
+      width: 100%;
+    }
+
+    .why-hero-content .cta-note {
+      margin: 0;
+      max-width: min(42rem, 85vw);
+    }
+
+    .section p {
+      text-align: center;
+      text-wrap: pretty;
+    }
+
+    @supports (text-wrap: balance) {
+      .cta-note,
+      .section p {
+        text-wrap: balance;
+      }
+    }
+
+    .section h2 + p {
+      margin-top: 0;
+    }
+
+    .why-bubbles {
+      margin-top: clamp(28px, 5vh, 44px);
+      display: grid;
+      gap: clamp(12px, 2.2vw, 18px);
+      grid-template-columns: 1fr;
+      text-align: left;
+    }
+
+    @media (min-width: 640px) {
+      .why-bubbles {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    .why-bubble {
+      margin: 0;
+      text-align: left;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 14px;
+      padding: clamp(16px, 2.6vw, 24px);
+    }
+
+    .why-bubble h3 {
+      margin: 0;
+      width: 100%;
+      font-size: clamp(1rem, 0.82rem + 0.85vw, 1.25rem);
+      line-height: 1.12;
+      letter-spacing: -0.025em;
+      color: var(--text-heading);
+      font-weight: var(--heading-weight);
+    }
+
+    .why-bubble p {
+      margin: clamp(10px, 1.8vh, 14px) 0 0;
+      width: 100%;
+      max-width: none;
+      font-size: clamp(0.875rem, 0.8rem + 0.25vw, 1rem);
+      color: var(--text-body);
+      text-align: left;
+      text-wrap: pretty;
+      line-height: var(--text-body-line);
+    }
+
+    .section-features {
+      margin-top: clamp(20px, 3vh, 32px);
+      min-height: calc(100dvh - var(--top-bar-height));
+      display: flex;
+      flex-direction: column;
+      padding-bottom: clamp(40px, 8vh, 80px);
+      --features-chrome: clamp(6rem, 16vh, 9.5rem);
+      --feature-media-max: min(52vh, 500px);
+    }
+
+    .section-features .section-kicker {
+      font-size: clamp(0.65rem, 0.55rem + 0.35vw, 0.8rem);
+    }
+
+    .section-features h2 {
+      margin-bottom: clamp(8px, 1.5vh, 12px);
+      padding-bottom: clamp(8px, 1.2vh, 10px);
+      font-size: clamp(1rem, 0.72rem + 1.4vw, 1.5rem);
+      font-weight: var(--heading-weight);
+      line-height: var(--heading-line);
+    }
+
+    .feature-carousel {
+      margin-top: clamp(8px, 1.5vh, 12px);
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      min-height: calc(100dvh - var(--top-bar-height) - var(--features-chrome) - 2rem);
+    }
+
+    .feature-carousel-row {
+      display: flex;
+      align-items: flex-start;
+      gap: clamp(6px, 1.2vw, 10px);
+      flex: 1 1 auto;
+      min-height: calc(100dvh - var(--top-bar-height) - var(--features-chrome) - 4.5rem);
+    }
+
+    .feature-nav {
+      flex: 0 0 auto;
+      align-self: center;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: clamp(32px, 7vw, 40px);
+      height: clamp(32px, 7vw, 40px);
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.04);
+      color: #e8e9f2;
+      cursor: pointer;
+      padding: 0;
+      transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease, transform 160ms ease;
+    }
+
+    .feature-nav:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.16);
+      color: #ffffff;
+      transform: scale(1.04);
+    }
+
+    .feature-nav:focus-visible {
+      outline: 2px solid #8f84ff;
+      outline-offset: 2px;
+    }
+
+    .feature-nav svg {
+      display: block;
+    }
+
+    @media (max-width: 420px) {
+      .feature-nav {
+        width: 40px;
+        height: 40px;
+      }
+
+      .feature-carousel-row {
+        gap: 6px;
+      }
+    }
+
+    .feature-viewport {
+      flex: 0 0 auto;
+      width: 100%;
+      min-width: 0;
+      height: auto;
+      overflow: hidden;
+      border-radius: clamp(10px, 1.5vw, 12px);
+    }
+
+    .feature-track {
+      display: flex;
+      width: 100%;
+      height: auto;
+      align-items: flex-start;
+      transition: transform 420ms ease;
+      will-change: transform;
+    }
+
+    .feature-card {
+      flex: 0 0 100%;
+      display: flex;
+      flex-direction: column;
+      align-self: flex-start;
+      width: 100%;
+      height: auto;
+      min-height: 0;
+      min-height: calc(100dvh - var(--top-bar-height) - var(--features-chrome) - 5rem);
+      max-height: none;
+      overflow: hidden;
+      text-align: left;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: clamp(10px, 1.5vw, 14px);
+      padding: clamp(10px, 1.4vw + 0.4vh, 16px);
+      transition:
+        border-color 180ms ease,
+        background-color 180ms ease,
+        box-shadow 180ms ease,
+        transform 180ms ease;
+    }
+
+    @media (hover: hover) {
+      .feature-card:hover {
+        border-color: rgba(143, 132, 255, 0.32);
+        background: rgba(255, 255, 255, 0.045);
+        box-shadow:
+          0 12px 40px rgba(0, 0, 0, 0.38),
+          0 0 0 1px rgba(108, 92, 255, 0.12);
+        transform: translateY(-2px);
+      }
+
+      .feature-card:hover .feature-card-icon {
+        background: rgba(108, 92, 255, 0.24);
+        border-color: rgba(143, 132, 255, 0.45);
+        color: #d4ceff;
+      }
+
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .feature-card {
+        transition: border-color 180ms ease, background-color 180ms ease, box-shadow 180ms ease;
+      }
+
+      .feature-card:hover {
+        transform: none;
+      }
+    }
+
+    .feature-card-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      width: clamp(34px, 5vw, 42px);
+      height: clamp(34px, 5vw, 42px);
+      border-radius: 10px;
+      border: 1px solid rgba(108, 92, 255, 0.28);
+      background: rgba(108, 92, 255, 0.14);
+      color: #b0a8ff;
+      transition: background-color 180ms ease, border-color 180ms ease, color 180ms ease;
+    }
+
+    .feature-card-icon svg {
+      display: block;
+      width: clamp(18px, 2.8vw, 22px);
+      height: clamp(18px, 2.8vw, 22px);
+    }
+
+    .feature-card-head {
+      display: flex;
+      align-items: center;
+      gap: clamp(10px, 1.5vw, 12px);
+      flex: 0 0 auto;
+      padding-bottom: clamp(10px, 1.2vh, 14px);
+      margin-bottom: clamp(4px, 0.8vh, 8px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    }
+
+    .feature-card-head h3 {
+      margin: 0;
+      flex: 1 1 auto;
+      font-size: clamp(1rem, 0.72rem + 0.9vw + 0.35vh, 1.35rem);
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+      color: #ffffff;
+      text-wrap: balance;
+    }
+
+    .feature-card-split {
+      margin-top: clamp(8px, 1.2vh, 12px);
+      flex: 1 1 auto;
+      min-height: clamp(320px, 50vh, 520px);
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 0;
+      align-items: stretch;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: clamp(8px, 1.2vw, 12px);
+      background: rgba(255, 255, 255, 0.015);
+    }
+
+    @media (min-width: 760px) {
+      .feature-card-split {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        grid-template-rows: minmax(0, 1fr);
+        min-height: clamp(300px, 44vh, 520px);
+      }
+    }
+
+    .feature-card-copy {
+      margin: 0;
+      min-width: 0;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: clamp(10px, 1.6vh, 18px);
+      padding: clamp(16px, 2.5vw, 28px);
+      box-sizing: border-box;
+      text-align: left;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    @media (min-width: 760px) {
+      .feature-card-copy {
+        border-bottom: none;
+        border-right: 1px solid rgba(255, 255, 255, 0.06);
+      }
+    }
+
+    .feature-card-lead {
+      margin: 0;
+      font-size: clamp(1.05rem, 0.9rem + 0.55vw, 1.5rem);
+      font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: -0.025em;
+      color: #ffffff;
+      text-wrap: balance;
+    }
+
+    .feature-card-body {
+      margin: 0;
+      font-size: clamp(0.875rem, 0.8rem + 0.35vw, 1.125rem);
+      font-weight: 400;
+      line-height: 1.48;
+      color: #b4b6c8;
+      text-wrap: pretty;
+      overflow-wrap: break-word;
+    }
+
+    .feature-card-media {
+      margin: 0;
+      min-width: 0;
+      min-height: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: clamp(14px, 2.2vw, 24px);
+      box-sizing: border-box;
+      overflow: hidden;
+      line-height: 0;
+    }
+
+    .feature-card-media :is(img, video) {
+      display: block;
+      width: 100%;
+      height: 100%;
+      max-width: 100%;
+      max-height: 100%;
+      border: none;
+      border-radius: 0;
+      background: transparent;
+      object-fit: contain;
+      object-position: center;
+    }
+
+    @media (min-width: 900px) and (min-height: 700px) {
+      .section-features {
+        --features-chrome: clamp(6rem, 12vh, 9rem);
+        --feature-media-max: min(
+          calc(100dvh - var(--top-bar-height) - var(--features-chrome) - 6.5rem),
+          58vh,
+          560px
+        );
+      }
+
+      .section-features h2 {
+        font-size: clamp(1.2rem, 0.85rem + 1.6vw, 2rem);
+      }
+
+      .feature-card {
+        padding: clamp(10px, 1.4vw + 0.5vh, 18px);
+      }
+
+      .feature-card-head h3 {
+        font-size: clamp(1.2rem, 0.92rem + 1vw, 1.85rem);
+      }
+
+    }
+
+    @media (min-width: 1200px) and (min-height: 800px) {
+      .section-features {
+        --feature-media-max: min(
+          calc(100dvh - var(--top-bar-height) - var(--features-chrome) - 6rem),
+          62vh,
+          620px
+        );
+      }
+
+      .feature-card-head h3 {
+        font-size: clamp(1.35rem, 1rem + 1.1vw, 2rem);
+      }
+    }
+
+    @media (max-height: 700px) {
+      .section-features {
+        --feature-media-max: min(38vh, 320px);
+      }
+      .section-features {
+        min-height: calc(100dvh - var(--top-bar-height));
+        --features-chrome: clamp(4.5rem, 12vh, 6.5rem);
+      }
+
+      .feature-carousel,
+      .feature-carousel-row,
+      .feature-card {
+        min-height: 0;
+      }
+
+      .feature-card-split {
+        min-height: clamp(280px, 45vh, 420px);
+      }
+    }
+
+    .feature-tabs {
+      flex: 0 0 auto;
+      margin-top: clamp(8px, 1.5vh, 12px);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: clamp(6px, 1.2vw, 10px);
+    }
+
+    .feature-tab {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 2.25rem;
+      padding: clamp(5px, 1vh, 8px) clamp(8px, 1.5vw, 12px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.04);
+      color: #8f91a4;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: clamp(0.65rem, 0.58rem + 0.3vw, 0.8rem);
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease;
+    }
+
+    .feature-tab:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.16);
+      color: #e8e9f2;
+    }
+
+    .feature-tab:focus-visible {
+      outline: 2px solid #8f84ff;
+      outline-offset: 2px;
+    }
+
+    .feature-tab.is-active {
+      background: rgba(108, 92, 255, 0.28);
+      border-color: rgba(143, 132, 255, 0.55);
+      color: #ffffff;
+      box-shadow: inset 0 0 0 1px rgba(143, 132, 255, 0.35);
+    }
+
+    .section p a {
+      color: #babaca;
+      font-weight: 600;
+      text-decoration: underline;
+      text-decoration-color: rgba(108, 92, 255, 0.5);
+      text-underline-offset: 3px;
+    }
+
+    .section p a:hover {
+      color: #f0f0f8;
+      text-decoration-color: rgba(108, 92, 255, 0.95);
+    }
+
+    .small {
+      font-size: clamp(0.8125rem, 0.68rem + 0.75vw, 1rem);
+      font-weight: 400;
+      color: #6e6f7e;
+      margin-top: clamp(8px, 2vh, 12px);
+      line-height: clamp(1.5, 1.42 + 0.15vw, 1.6);
+    }
+
+    .home-preview {
+      margin-top: clamp(20px, 4vh, 36px);
+      width: min(100%, 1180px);
+      margin-inline: auto;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.02);
+      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.35);
+    }
+
+    .home-preview :is(img, video) {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    @media (max-width: 520px) {
+      .top-bar {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .top-bar-brand {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .top-bar-nav {
+        order: 3;
+        width: 100%;
+        justify-content: center;
+      }
+
+      .cta input {
+        font-size: 16px;
+      }
+
+      .home-hero-copy .cta {
+        flex-wrap: wrap;
+      }
+
+      .home-hero-copy .cta input {
+        flex: 1 1 100%;
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="page-backdrop" aria-hidden="true">
+    <span class="page-backdrop__orb page-backdrop__orb--hero"></span>
+    <span class="page-backdrop__orb page-backdrop__orb--mid"></span>
+    <span class="page-backdrop__orb page-backdrop__orb--low"></span>
+  </div>
+
+  <header class="top-bar" role="banner">
+    <a class="top-bar-brand" href="./" aria-label="Katana — top of page">
+      <img
+        class="top-bar-logo"
+        src="katana-brand.png"
+        width="1024"
+        height="682"
+        alt="Katana — Business Operating System"
+        decoding="async"
+      >
+    </a>
+    <nav class="top-bar-nav" aria-label="Section navigation">
+      <!-- Add new section links here as more sections are created -->
+      <a class="top-bar-link" href="#home">Home</a>
+      <a class="top-bar-link" href="#why-katana">Why Katana</a>
+      <a class="top-bar-link" href="#features" aria-label="Capabilities">Capabilities</a>
+    </nav>
+    <a class="top-bar-button" href="#join">Join Katana Early</a>
+  </header>
+
+  <div class="container">
+    <section class="section section-home" id="home" aria-labelledby="home-hero-title">
+      <div class="home-hero">
+        <div class="home-hero-copy">
+          <p class="section-kicker">Business operating system</p>
+          <h1 class="home-hero-title" id="home-hero-title">Your company's command center.</h1>
+          <p class="home-hero-subtitle">Connected infrastructure and unified intelligence—built for scaling startups.</p>
+          <div class="cta" id="join">
+            <input type="email" placeholder="Enter your email" aria-label="Email address">
+            <button type="button">Join Katana Early</button>
+          </div>
+          <p class="cta-note">We're currently running pilots—share your email for updates on openings and launch timing.</p>
+        </div>
+        <figure class="home-preview home-hero-preview">
+          <video
+            src="hub-demo.mp4"
+            width="1024"
+            height="576"
+            autoplay
+            muted
+            loop
+            playsinline
+            preload="auto"
+            poster="katana-hub-screenshot.png"
+            aria-label="Katana Hub product preview"
+          ></video>
+        </figure>
+      </div>
+    </section>
+
+    <section class="section section-why" id="why-katana" aria-labelledby="why-katana-title">
+      <div class="why-hero">
+        <div class="why-hero-content">
+          <p class="section-kicker">Why Katana</p>
+          <h2 id="why-katana-title">The operating system behind your operations.</h2>
+          <p>One connected infrastructure—unified intelligence across every team, workflow, and decision.</p>
+          <p class="cta-note">We're currently running pilots—<a href="#join">join early</a> for updates on openings and launch timing.</p>
+        </div>
+      </div>
+      <div class="why-bubbles">
+        <article class="why-bubble">
+          <h3>One OS, not a dozen tools</h3>
+          <p>Every function lives in one connected infrastructure—no more app-hopping.</p>
+        </article>
+        <article class="why-bubble">
+          <h3>Infrastructure that scales</h3>
+          <p>As complexity grows, one system keeps operations aligned and your teams in sync.</p>
+        </article>
+        <article class="why-bubble">
+          <h3>Unified intelligence</h3>
+          <p>AI-powered workflows and insights across every department—from one command center.</p>
+        </article>
+        <article class="why-bubble">
+          <h3>Full capability. One stack.</h3>
+          <p>Replace fragmented subscriptions without losing what your company runs on.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section section-features" id="features" aria-labelledby="features-title">
+      <p class="section-kicker">Capabilities</p>
+      <h2 id="features-title">Your company's operational command center.</h2>
+      <div class="feature-carousel" aria-live="polite">
+        <div class="feature-carousel-row">
+          <button type="button" class="feature-nav feature-nav-prev" aria-label="Previous feature">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M14 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <div class="feature-viewport">
+          <div class="feature-track">
+        <article class="feature-card feature-card-hr">
+          <header class="feature-card-head">
+            <span class="feature-card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                <circle cx="9" cy="7" r="4"/>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
+              </svg>
+            </span>
+            <h3>Katana HR</h3>
+          </header>
+          <div class="feature-card-split">
+            <div class="feature-card-copy">
+              <p class="feature-card-lead">People operations</p>
+              <p class="feature-card-body">Run hiring, onboarding, and employee records without a separate HRIS. Track goals, reviews, and org changes as your team grows—every role and skill feeds directly into project staffing and workforce scheduling. When people data lives in the same OS as delivery and operations, HR stops being a silo.</p>
+            </div>
+            <figure class="feature-card-media">
+              <video
+                src="hr-demo.mp4"
+                width="1024"
+                height="576"
+                autoplay
+                muted
+                playsinline
+                preload="auto"
+                poster="katana-hr-screenshot.png"
+                aria-label="Katana HR interface demo"
+              ></video>
+            </figure>
+          </div>
+        </article>
+        <article class="feature-card feature-card-pm">
+          <header class="feature-card-head">
+            <span class="feature-card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="7" height="7" rx="1"/>
+                <rect x="14" y="3" width="7" height="7" rx="1"/>
+                <rect x="3" y="14" width="7" height="7" rx="1"/>
+                <rect x="14" y="14" width="7" height="7" rx="1"/>
+              </svg>
+            </span>
+            <h3>Katana PM</h3>
+          </header>
+          <div class="feature-card-split">
+            <div class="feature-card-copy">
+              <p class="feature-card-lead">Project management</p>
+              <p class="feature-card-body">Plan projects, milestones, and tasks in one workspace with clear owners and live status. See dependencies, blockers, and progress without chasing updates across email and spreadsheets. Because PM shares data with CRM, inventory, and HR, schedules and commitments stay tied to real capacity and customer demand.</p>
+            </div>
+            <figure class="feature-card-media">
+              <video
+                src="pm-demo.mp4"
+                width="1024"
+                height="576"
+                autoplay
+                muted
+                playsinline
+                preload="auto"
+                poster="katana-pm-screenshot.png"
+                aria-label="Katana PM interface demo"
+              ></video>
+            </figure>
+          </div>
+        </article>
+        <article class="feature-card feature-card-customers">
+          <header class="feature-card-head">
+            <span class="feature-card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                <circle cx="9" cy="7" r="4"/>
+                <path d="M22 11l-2-2m0 0l-2 2m2-2v6"/>
+              </svg>
+            </span>
+            <h3>Katana Customers</h3>
+          </header>
+          <div class="feature-card-split">
+            <div class="feature-card-copy">
+              <p class="feature-card-lead">Customer relationships</p>
+              <p class="feature-card-body">Capture leads, qualify opportunities, and move deals through your pipeline with full context at every stage. Every call, note, and agreement sits on the account record from first touch through renewal. Sales, delivery, support, and billing stay connected—so handoffs don't lose history when work moves downstream.</p>
+            </div>
+            <figure class="feature-card-media">
+              <video
+                src="crm-demo.mp4"
+                width="1024"
+                height="576"
+                autoplay
+                muted
+                playsinline
+                preload="auto"
+                poster="katana-customers-screenshot.png"
+                aria-label="Katana Customers interface demo"
+              ></video>
+            </figure>
+          </div>
+        </article>
+        <article class="feature-card feature-card-inventory">
+          <header class="feature-card-head">
+            <span class="feature-card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                <path d="M3.27 6.96 12 12.01l8.73-5.05M12 22.08V12"/>
+              </svg>
+            </span>
+            <h3>Katana Inventory</h3>
+          </header>
+          <div class="feature-card-split">
+            <div class="feature-card-copy">
+              <p class="feature-card-lead">Inventory control</p>
+              <p class="feature-card-body">Know quantities by location, SKU, and bin with live adjustments as goods move. Scan items in, pick for jobs, and transfer stock with a clear audit trail tied to projects and orders. Purchase orders surface from real demand—so you're not reconciling inventory in one tool and fulfillment in another.</p>
+            </div>
+            <figure class="feature-card-media">
+              <video
+                src="inv-demo.mp4"
+                width="1024"
+                height="576"
+                autoplay
+                muted
+                playsinline
+                preload="auto"
+                poster="katana-inventory-screenshot.png"
+                aria-label="Katana Inventory interface demo"
+              ></video>
+            </figure>
+          </div>
+        </article>
+        <article class="feature-card feature-card-workforce">
+          <header class="feature-card-head">
+            <span class="feature-card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="4" width="18" height="18" rx="2"/>
+                <path d="M16 2v4M8 2v4M3 10h18"/>
+              </svg>
+            </span>
+            <h3>Katana Workforce</h3>
+          </header>
+          <div class="feature-card-split">
+            <div class="feature-card-copy">
+              <p class="feature-card-lead">Workforce scheduling</p>
+              <p class="feature-card-body">Build schedules around skills, sites, and availability—with coverage you can see before shifts go live. Track hours against jobs, projects, and cost centers so labor rolls up to how the business actually runs. Workforce stays aligned with HR records and PM load, so staffing reflects who's hired and what work is due.</p>
+            </div>
+            <figure class="feature-card-media">
+              <video
+                src="wfm-demo.mp4"
+                width="1024"
+                height="576"
+                autoplay
+                muted
+                playsinline
+                preload="auto"
+                poster="katana-workforce-screenshot.png"
+                aria-label="Katana Workforce interface demo"
+              ></video>
+            </figure>
+          </div>
+        </article>
+        <article class="feature-card feature-card-investor">
+          <header class="feature-card-head">
+            <span class="feature-card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 3v18h18"/>
+                <path d="M7 14l4-4 4 4 5-6"/>
+              </svg>
+            </span>
+            <h3>Know Your Investor</h3>
+          </header>
+          <div class="feature-card-split">
+            <div class="feature-card-copy">
+              <p class="feature-card-lead">Investor relations</p>
+              <p class="feature-card-body">Keep investor profiles, ownership, and cap table context in one registry instead of scattered decks and spreadsheets. Log meetings, updates, and documents on each relationship so comms history is searchable when diligence starts. Export board-ready summaries when you need them—fundraising stays organized and auditable across every touchpoint.</p>
+            </div>
+            <figure class="feature-card-media">
+              <img
+                src="katana-investor-screenshot.png"
+                width="1024"
+                height="576"
+                alt="Know Your Investor interface screenshot"
+                decoding="async"
+              >
+            </figure>
+          </div>
+        </article>
+          </div>
+          </div>
+          <button type="button" class="feature-nav feature-nav-next" aria-label="Next feature">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M10 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="feature-tabs" role="tablist" aria-label="Feature navigation">
+          <button class="feature-tab" type="button" role="tab" aria-selected="true" aria-label="Katana HR">HR</button>
+          <button class="feature-tab" type="button" role="tab" aria-selected="false" aria-label="Katana PM">PM</button>
+          <button class="feature-tab" type="button" role="tab" aria-selected="false" aria-label="Katana Customers">CRM</button>
+          <button class="feature-tab" type="button" role="tab" aria-selected="false" aria-label="Katana Inventory">INV</button>
+          <button class="feature-tab" type="button" role="tab" aria-selected="false" aria-label="Katana Workforce">WFM</button>
+          <button class="feature-tab" type="button" role="tab" aria-selected="false" aria-label="Know Your Investor">KYI</button>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <script>
+    (() => {
+      const topBar = document.querySelector(".top-bar");
+      const setTopBarHeightVar = () => {
+        if (!topBar) return;
+        document.documentElement.style.setProperty("--top-bar-height", `${topBar.offsetHeight}px`);
+      };
+
+      const syncTopBarScroll = () => {
+        if (!topBar) return;
+        topBar.classList.toggle("is-scrolled", window.scrollY > 16);
+      };
+
+      const homeHeroVideo = document.querySelector(".home-hero-preview video");
+      if (homeHeroVideo) {
+        homeHeroVideo.muted = true;
+        const homePlay = homeHeroVideo.play();
+        if (homePlay && typeof homePlay.catch === "function") {
+          homePlay.catch(() => {});
+        }
+      }
+
+      const featureTrack = document.querySelector(".feature-track");
+      const featureViewport = document.querySelector(".feature-viewport");
+      const featureSlides = featureTrack ? Array.from(featureTrack.querySelectorAll(".feature-card")) : [];
+      const featureTabs = Array.from(document.querySelectorAll(".feature-tab"));
+      const featurePrev = document.querySelector(".feature-nav-prev");
+      const featureNext = document.querySelector(".feature-nav-next");
+      let featureIndex = 0;
+      let featureAutoTimerId = null;
+      let featureAutoAbort = null;
+      const FEATURE_IMAGE_AUTO_MS = 5000;
+
+      const getFeatureMediaElement = (scope) =>
+        scope.querySelector(".feature-card-media img, .feature-card-media video");
+      const playFeatureVideo = (video) => {
+        video.muted = true;
+        const playAttempt = video.play();
+        if (playAttempt && typeof playAttempt.catch === "function") {
+          playAttempt.catch(() => {});
+        }
+      };
+
+      const featureSplitMq = window.matchMedia("(min-width: 760px)");
+
+      const resetFeatureCopyFit = () => {
+        document.querySelectorAll(".feature-card-copy").forEach((copy) => {
+          copy.style.removeProperty("font-size");
+          copy.querySelectorAll(".feature-card-lead, .feature-card-body").forEach((el) => {
+            el.style.fontSize = "";
+            el.style.lineHeight = "";
+          });
+        });
+      };
+
+      const fitFeatureCopyToPane = (copy, paneHeight) => {
+        const lead = copy.querySelector(".feature-card-lead");
+        const body = copy.querySelector(".feature-card-body");
+        if (!lead || !body || paneHeight <= 0) return;
+
+        lead.style.lineHeight = "1.15";
+        body.style.lineHeight = "1.48";
+
+        const applySizes = (bodyPx) => {
+          const leadPx = bodyPx * 1.22;
+          body.style.fontSize = `${bodyPx}px`;
+          lead.style.fontSize = `${leadPx}px`;
+        };
+
+        let lo = 11;
+        let hi = 26;
+        let best = 14;
+
+        for (let i = 0; i < 32; i++) {
+          const mid = (lo + hi) / 2;
+          applySizes(mid);
+          if (copy.scrollHeight > paneHeight) {
+            hi = mid;
+          } else {
+            best = mid;
+            lo = mid;
+          }
+        }
+
+        applySizes(best);
+
+        let bodyPx = best;
+        while (copy.scrollHeight < paneHeight * 0.98 && bodyPx < hi) {
+          bodyPx += 0.5;
+          applySizes(bodyPx);
+          if (copy.scrollHeight > paneHeight) {
+            applySizes(bodyPx - 0.5);
+            break;
+          }
+        }
+      };
+
+      const syncFeatureSplitHeights = () => {
+        if (!featureSplitMq.matches) {
+          resetFeatureCopyFit();
+        } else {
+          document.querySelectorAll(".feature-card-split").forEach((split) => {
+            const copy = split.querySelector(".feature-card-copy");
+            if (!copy) return;
+            copy.querySelectorAll(".feature-card-lead, .feature-card-body").forEach((el) => {
+              el.style.fontSize = "";
+              el.style.lineHeight = "";
+            });
+            const paneHeight = copy.clientHeight;
+            if (paneHeight > 0) {
+              fitFeatureCopyToPane(copy, paneHeight);
+            }
+          });
+        }
+
+        const activeCard = featureSlides[featureIndex];
+        if (featureViewport && activeCard) {
+          featureViewport.style.height = `${activeCard.offsetHeight}px`;
+        }
+      };
+
+      const stopFeatureAutoScroll = () => {
+        if (featureAutoTimerId !== null) {
+          window.clearTimeout(featureAutoTimerId);
+          featureAutoTimerId = null;
+        }
+        if (featureAutoAbort) {
+          featureAutoAbort.abort();
+          featureAutoAbort = null;
+        }
+      };
+
+      const getActiveFeatureVideo = () =>
+        featureSlides[featureIndex]?.querySelector(".feature-card-media video") ?? null;
+
+      const syncFeatureVideoPlayback = () => {
+        featureSlides.forEach((slide, slideIndex) => {
+          slide.querySelectorAll(".feature-card-media video").forEach((video) => {
+            if (slideIndex === featureIndex) {
+              video.currentTime = 0;
+              playFeatureVideo(video);
+            } else {
+              video.pause();
+              video.currentTime = 0;
+            }
+          });
+        });
+      };
+
+      const advanceFeatureCarousel = () => {
+        stopFeatureAutoScroll();
+        setActiveFeature(featureIndex + 1);
+      };
+
+      const scheduleFeatureAutoScroll = () => {
+        stopFeatureAutoScroll();
+        if (featureSlides.length <= 1) return;
+
+        const video = getActiveFeatureVideo();
+        if (video) {
+          if (!(Number.isFinite(video.duration) && video.duration > 0)) {
+            video.addEventListener("loadedmetadata", () => scheduleFeatureAutoScroll(), { once: true });
+            return;
+          }
+
+          featureAutoAbort = new AbortController();
+          video.addEventListener("ended", () => advanceFeatureCarousel(), {
+            once: true,
+            signal: featureAutoAbort.signal,
+          });
+
+          featureAutoTimerId = window.setTimeout(
+            advanceFeatureCarousel,
+            video.duration * 1000 + 500
+          );
+          return;
+        }
+
+        featureAutoTimerId = window.setTimeout(advanceFeatureCarousel, FEATURE_IMAGE_AUTO_MS);
+      };
+
+      const setActiveFeature = (index) => {
+        if (!featureTrack || featureSlides.length === 0) return;
+        const nextIndex = ((index % featureSlides.length) + featureSlides.length) % featureSlides.length;
+        featureIndex = nextIndex;
+        featureTrack.style.transform = `translateX(-${featureIndex * 100}%)`;
+        featureTabs.forEach((tab, tabIndex) => {
+          const isActive = tabIndex === featureIndex;
+          tab.classList.toggle("is-active", isActive);
+          tab.setAttribute("aria-selected", isActive ? "true" : "false");
+        });
+        syncFeatureVideoPlayback();
+        syncFeatureSplitHeights();
+        window.setTimeout(syncFeatureSplitHeights, 450);
+        scheduleFeatureAutoScroll();
+      };
+
+      featureTabs.forEach((tab, index) => {
+        tab.addEventListener("click", () => {
+          setActiveFeature(index);
+        });
+      });
+
+      if (featurePrev) {
+        featurePrev.addEventListener("click", () => {
+          setActiveFeature(featureIndex - 1);
+        });
+      }
+      if (featureNext) {
+        featureNext.addEventListener("click", () => {
+          setActiveFeature(featureIndex + 1);
+        });
+      }
+
+      if (featureTrack && featureSlides.length > 0) {
+        setActiveFeature(0);
+      }
+
+      featureSplitMq.addEventListener("change", syncFeatureSplitHeights);
+
+      let syncResizeTimer = null;
+      window.addEventListener("resize", () => {
+        window.clearTimeout(syncResizeTimer);
+        syncResizeTimer = window.setTimeout(syncFeatureSplitHeights, 100);
+      });
+      window.addEventListener("load", syncFeatureSplitHeights);
+      document.querySelectorAll(".feature-card-media img").forEach((img) => {
+        if (!img.complete) {
+          img.addEventListener("load", syncFeatureSplitHeights, { once: true });
+        }
+      });
+      document.querySelectorAll(".feature-card-media video").forEach((video) => {
+        const syncVideo = () => {
+          syncFeatureSplitHeights();
+          syncFeatureVideoPlayback();
+        };
+
+        if (video.readyState >= 1) {
+          syncVideo();
+        } else {
+          video.addEventListener("loadeddata", syncVideo, { once: true });
+        }
+      });
+
+      const navLinks = Array.from(document.querySelectorAll(".top-bar-link[href^='#']"));
+      const sections = navLinks
+        .map((link) => {
+          const id = link.getAttribute("href");
+          if (!id) return null;
+          const section = document.querySelector(id);
+          return section ? { id: id.slice(1), link, section } : null;
+        })
+        .filter(Boolean);
+
+      if (sections.length === 0) return;
+
+      const setActive = (activeId) => {
+        sections.forEach(({ id, link }) => {
+          const isActive = id === activeId;
+          link.classList.toggle("is-active", isActive);
+          if (isActive) {
+            link.setAttribute("aria-current", "page");
+          } else {
+            link.removeAttribute("aria-current");
+          }
+        });
+      };
+
+      const syncActiveSection = () => {
+        const viewTop = topBar ? topBar.offsetHeight : 0;
+        const viewBottom = window.innerHeight;
+        let currentId = sections[0].id;
+        let bestVisible = 0;
+
+        sections.forEach(({ id, section }) => {
+          const rect = section.getBoundingClientRect();
+          const visibleTop = Math.max(rect.top, viewTop);
+          const visibleBottom = Math.min(rect.bottom, viewBottom);
+          const visible = Math.max(0, visibleBottom - visibleTop);
+          if (visible > bestVisible) {
+            bestVisible = visible;
+            currentId = id;
+          }
+        });
+
+        setActive(currentId);
+      };
+
+      let rafId = null;
+      const scheduleSync = () => {
+        if (rafId !== null) return;
+        rafId = window.requestAnimationFrame(() => {
+          rafId = null;
+          setTopBarHeightVar();
+          syncTopBarScroll();
+          syncActiveSection();
+        });
+      };
+
+      window.addEventListener("scroll", scheduleSync, { passive: true });
+      window.addEventListener("resize", scheduleSync);
+      window.addEventListener("hashchange", scheduleSync);
+
+      sections.forEach(({ id, link }) => {
+        link.addEventListener("click", () => {
+          setActive(id);
+        });
+      });
+
+      setTopBarHeightVar();
+      syncTopBarScroll();
+      scheduleSync();
+    })();
+  </script>
+
+</body>
+</html>
