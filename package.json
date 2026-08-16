@@ -1,0 +1,11 @@
+{
+  "name": "katana-landing-page",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node serve-static.mjs"
+  },
+  "dependencies": {
+    "nodemailer": "^6.10.1"
+  }
+}
