@@ -727,6 +727,65 @@ a {
   line-height: 1.6;
 }
 
+.module-grid {
+  display: grid;
+  gap: 14px;
+  margin-top: 28px;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 700px) {
+  .module-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1080px) {
+  .module-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.module-tile {
+  padding: 22px 22px 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 48%),
+    var(--surface);
+}
+
+.module-tile span {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--aqua);
+}
+
+.module-tile h3 {
+  margin: 0;
+  font-size: 1.08rem;
+  letter-spacing: -0.02em;
+}
+
+.module-tile p {
+  margin: 8px 0 0;
+  color: var(--text-body);
+  line-height: 1.55;
+  font-size: 0.95rem;
+}
+
+.also-line {
+  margin: 22px 0 0;
+  max-width: 46rem;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
 .pipeline {
   display: grid;
   gap: 16px;
