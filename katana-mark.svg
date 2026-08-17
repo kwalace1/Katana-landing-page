@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" role="img" aria-label="Katana">
+  <defs>
+    <linearGradient id="steel" x1="20" y1="12" x2="44" y2="52" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F4F6F8"/>
+      <stop offset=".48" stop-color="#C8CCD4"/>
+      <stop offset="1" stop-color="#8B919A"/>
+    </linearGradient>
+    <linearGradient id="blade" x1="14" y1="46" x2="52" y2="38" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2E6CFF"/>
+      <stop offset="1" stop-color="#3DDCFF"/>
+    </linearGradient>
+  </defs>
+  <circle cx="32" cy="32" r="31" fill="#141416" stroke="#2A2A32"/>
+  <path fill="url(#steel)" d="M21.5 16h6.2v12.4L39.2 16h7.3L34.1 32.2 47 48h-7.4L27.7 35.2V48h-6.2V16Z"/>
+  <path d="M16 45.2c8.6 4.2 17.4 4.6 32.6-5.4" stroke="url(#blade)" stroke-width="2.6" stroke-linecap="round"/>
+</svg>

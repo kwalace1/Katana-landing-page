@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Talk to us — Katana</title>
+  <meta name="description" content="Talk to Katana about Business, VEYAH, or Personal. Backed by DW Growth and Capital.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="/katana-mark.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/site.css">
+</head>
+<body data-page="contact">
+  <div class="page-backdrop" aria-hidden="true"></div>
+  <div class="page-shell">
+    <header class="site-header" role="banner">
+      <div class="header-inner">
+        <a class="brand-lockup" href="/" aria-label="Katana home">
+          <img class="brand-mark" src="/katana-mark.svg" width="40" height="40" alt="">
+          <span class="brand-word">KATANA</span>
+        </a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+          <span class="nav-toggle-bar"></span>
+          <span class="nav-toggle-bar"></span>
+          <span class="sr-only">Menu</span>
+        </button>
+        <nav class="site-nav" id="site-nav" aria-label="Primary">
+          <div class="nav-item nav-item--dropdown">
+            <a class="nav-link" href="/products" data-nav="products">Products</a>
+            <div class="nav-dropdown">
+              <a href="/products/business">Katana Business<span>Operations OS</span></a>
+              <a href="/products/veyah">VEYAH<span>Data translation</span></a>
+              <a href="/products/personal">Katana Personal<span>Daily OS</span></a>
+            </div>
+          </div>
+          <a class="nav-link" href="/company" data-nav="company">Company</a>
+          <a class="nav-link" href="/contact" data-nav="contact">Contact</a>
+          <a class="btn btn-primary header-cta" href="/contact">Talk to us</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="page-hero">
+        <p class="crumb"><a href="/">Home</a> / Contact</p>
+        <p class="serif">Talk to us.</p>
+        <h1>Tell us what you’re trying to run.</h1>
+        <p class="section-lede">Pilots for Business, a translation with VEYAH, or a conversation about the stack. We’ll get back to you.</p>
+        <p class="hero-trust">Backed by <strong>DW Growth and Capital</strong></p>
+      </section>
+
+      <form class="contact-form" id="contact-form" novalidate>
+        <label class="sr-only" for="name">Name</label>
+        <input id="name" name="name" type="text" autocomplete="name" placeholder="Your name" required>
+
+        <label class="sr-only" for="email">Email</label>
+        <input id="email" name="email" type="email" autocomplete="email" placeholder="Work email" required>
+
+        <label class="sr-only" for="company">Company</label>
+        <input id="company" name="company" type="text" autocomplete="organization" placeholder="Company (optional)">
+
+        <label class="sr-only" for="product">Product</label>
+        <select id="product" name="product">
+          <option value="">Which product? (optional)</option>
+          <option value="business">Katana Business</option>
+          <option value="veyah">VEYAH</option>
+          <option value="personal">Katana Personal</option>
+          <option value="not-sure">Not sure yet</option>
+        </select>
+
+        <label class="sr-only" for="message">Message</label>
+        <textarea id="message" name="message" placeholder="What are you trying to run?" required></textarea>
+
+        <label class="check-row">
+          <input type="checkbox" name="waitlist">
+          Also add me to the Katana Business pilot list
+        </label>
+
+        <button class="btn btn-primary" type="submit" id="contact-submit">Send message</button>
+        <p class="form-status" id="contact-status" role="status" aria-live="polite" hidden></p>
+      </form>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <a class="brand-lockup" href="/" aria-label="Katana home">
+          <img class="brand-mark" src="/katana-mark.svg" width="40" height="40" alt="">
+          <span class="brand-word">KATANA</span>
+        </a>
+        <p class="footer-tagline">Operate with precision.</p>
+        <nav class="footer-nav" aria-label="Footer">
+          <a href="/products/business">Business</a>
+          <a href="/products/veyah">VEYAH</a>
+          <a href="/products/personal">Personal</a>
+          <a href="/company">Company</a>
+          <a href="/contact">Contact</a>
+        </nav>
+        <p class="footer-copy">© 2026 Katana. Backed by DW Growth and Capital.</p>
+      </div>
+    </footer>
+  </div>
+  <script src="/js/site.js"></script>
+</body>
+</html>
