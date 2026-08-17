@@ -20,8 +20,9 @@
     <header class="site-header" role="banner">
       <div class="header-inner">
         <a class="brand-lockup" href="/" aria-label="Katana home">
-          <img class="brand-mark" src="/katana-mark.svg" width="40" height="40" alt="">
-          <span class="brand-word">KATANA</span>
+          <span class="brand-logo">
+            <img src="/katana-wordmark.png" width="1024" height="195" alt="Katana">
+          </span>
         </a>
         <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
           <span class="nav-toggle-bar"></span>
@@ -241,20 +242,27 @@
 
     <footer class="site-footer">
       <div class="footer-inner">
+        <div class="footer-brand">
         <a class="brand-lockup" href="/" aria-label="Katana home">
-          <img class="brand-mark" src="/katana-mark.svg" width="40" height="40" alt="">
-          <span class="brand-word">KATANA</span>
+          <span class="brand-logo">
+            <img src="/katana-wordmark.png" width="1024" height="195" alt="Katana">
+          </span>
         </a>
-        <p class="footer-tagline">Operate with precision.</p>
-        <nav class="footer-nav" aria-label="Footer">
-          <a href="/products/business">Business</a>
+          <p class="footer-tagline">Operate with precision.</p>
+        </div>
+        <nav class="footer-col" aria-label="Products">
+          <h2>Products</h2>
+          <a href="/products/business">Katana Business</a>
           <a href="/products/veyah">VEYAH</a>
-          <a href="/products/personal">Personal</a>
-          <a href="/company">Company</a>
-          <a href="/contact">Contact</a>
+          <a href="/products/personal">Katana Personal</a>
         </nav>
-        <p class="footer-copy">© 2026 Katana. Backed by DW Growth and Capital.</p>
+        <nav class="footer-col" aria-label="Company">
+          <h2>Company</h2>
+          <a href="/company">About</a>
+          <a href="/contact">Talk to us</a>
+        </nav>
       </div>
+      <p class="footer-copy">© 2026 Katana. Backed by DW Growth and Capital.</p>
     </footer>
   </div>
   <script src="/js/site.js"></script>

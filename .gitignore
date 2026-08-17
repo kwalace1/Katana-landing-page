@@ -1,4 +1,5 @@
 .env
+.env.local
 waitlist-signups.json
 contact-inquiries.json
 node_modules/
