@@ -1046,8 +1046,9 @@ a {
 }
 
 .phone-frame video {
-  aspect-ratio: 780 / 1688;
+  aspect-ratio: 390 / 844;
   object-fit: cover;
+  object-position: top center;
   background: #111;
 }
 

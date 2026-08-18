@@ -1,5 +1,5 @@
 Katana Personal marketing clips
-Portrait 780×1688, muted H.264. Drop into the phone frames on /products/personal.
+Portrait 390×844, muted H.264. Drop into the phone frames on /products/personal.
 
   personal-today.mp4      Capture “Call Mom Friday 3pm” + optional share sheet
   personal-ask.mp4        Ask chips — Close my day, then tap an action
