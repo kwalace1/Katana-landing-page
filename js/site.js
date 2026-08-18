@@ -35,9 +35,11 @@
   document.querySelectorAll("[data-nav]").forEach((link) => {
     const nav = link.dataset.nav;
     const productPages = ["products", "business", "veyah", "personal"];
+    const companyPages = ["company", "privacy", "terms"];
     const isActive =
       nav === page ||
-      (nav === "products" && productPages.includes(page));
+      (nav === "products" && productPages.includes(page)) ||
+      (nav === "company" && companyPages.includes(page));
     link.classList.toggle("is-active", Boolean(isActive));
     if (isActive) link.setAttribute("aria-current", "page");
   });

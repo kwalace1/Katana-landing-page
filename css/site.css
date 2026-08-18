@@ -1193,6 +1193,23 @@ a {
   margin: 0 0 1rem;
 }
 
+.legal-updated {
+  margin: 16px 0 0;
+  color: var(--text-muted);
+  font-size: 0.82rem;
+}
+
+.form-legal {
+  margin: 12px 0 0;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+.form-legal a {
+  color: var(--silver-bright);
+}
+
 .prose h2 {
   margin: 2.4rem 0 0.8rem;
   font-size: clamp(1.35rem, 1.1rem + 1vw, 1.8rem);
