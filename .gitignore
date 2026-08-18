@@ -4,3 +4,4 @@ waitlist-signups.json
 contact-inquiries.json
 node_modules/
 .vercel/
+.DS_Store

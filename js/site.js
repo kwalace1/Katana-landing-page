@@ -194,11 +194,14 @@
   if ("IntersectionObserver" in window) {
     const videoObserver = new IntersectionObserver((entries) => {
       for (const entry of entries) {
-        if (!entry.isIntersecting) continue;
         const video = entry.target;
         if (!(video instanceof HTMLVideoElement)) continue;
         if (video.closest(".feature-card-media")) continue;
-        tryPlayVideo(video);
+        if (entry.isIntersecting) {
+          tryPlayVideo(video);
+        } else {
+          video.pause();
+        }
       }
     }, { threshold: 0.2 });
     document.querySelectorAll("video[autoplay]").forEach((video) => videoObserver.observe(video));
