@@ -981,50 +981,32 @@ a {
   display: grid;
   gap: 28px;
   margin-top: 32px;
+  justify-items: center;
 }
 
 @media (min-width: 860px) {
   .ask-shots {
     display: flex;
-    align-items: stretch;
+    align-items: flex-start;
+    justify-content: center;
     gap: 28px;
-  }
-
-  .ask-shot {
-    display: flex;
-    flex-direction: column;
   }
 
   .ask-shot:first-child {
     flex: 0 0 280px;
+    width: 280px;
   }
 
   .ask-shot:last-child {
-    flex: 1 1 auto;
-    min-width: 0;
-  }
-
-  .ask-shot .plus-frame {
-    flex: 1 1 auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 0;
-    padding: 10px;
-  }
-
-  .ask-shot .plus-frame img {
-    width: auto;
-    height: 100%;
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
+    flex: 0 0 320px;
+    width: 320px;
   }
 }
 
 .plus-frame {
-  margin: 0;
-  padding: 14px;
+  margin: 0 auto;
+  width: min(100%, 320px);
+  padding: 10px;
   border-radius: var(--radius-lg);
   background: #f3f4f6;
   border: 1px solid var(--border);
