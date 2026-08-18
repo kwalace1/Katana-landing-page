@@ -105,10 +105,11 @@
       setStatus(status, "Submitting...", null);
       try {
         const product = waitlistForm.dataset.product || "business";
+        const website = waitlistForm.querySelector("[name='website']")?.value || "";
         const response = await fetch("/api/waitlist", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, product }),
+          body: JSON.stringify({ email, product, website }),
         });
         const data = await response.json().catch(() => ({}));
         if (!response.ok) throw new Error(data.error || "Something went wrong. Please try again.");
@@ -136,6 +137,7 @@
         product: String(form.get("product") || "").trim(),
         message: String(form.get("message") || "").trim(),
         waitlist: form.get("waitlist") === "on",
+        website: String(form.get("website") || "").trim(),
       };
       if (!payload.name || !payload.email || !payload.message) {
         setStatus(status, "Please fill in your name, email, and message.", "error");

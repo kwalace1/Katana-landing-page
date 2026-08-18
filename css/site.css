@@ -72,6 +72,14 @@ a {
   color: var(--text-heading);
 }
 
+.hp {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
 .sr-only {
   position: absolute;
   width: 1px;

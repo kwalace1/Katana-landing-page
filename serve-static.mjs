@@ -16,6 +16,7 @@ const mime = {
   ".json": "application/json",
   ".svg": "image/svg+xml",
   ".txt": "text/plain",
+  ".xml": "application/xml",
   ".ico": "image/x-icon",
   ".jpg": "image/jpeg",
   ".jpeg": "image/jpeg",
