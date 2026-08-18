@@ -1556,43 +1556,10 @@ a {
   background: #000;
 }
 
-.product-card-media--app img {
-  object-fit: contain;
+.product-card-media--app img,
+.product-card-media--app video {
+  object-fit: cover;
   object-position: center center;
-}
-
-.veyah-feature {
-  margin-top: 8px;
-}
-
-.veyah-shot figcaption,
-.veyah-feature-cap {
-  margin: 12px 8px 0;
-  text-align: center;
-  font-size: 0.82rem;
-  color: var(--text-body);
-  line-height: 1.45;
-}
-
-.veyah-shots {
-  display: grid;
-  gap: 28px;
-  margin-top: 28px;
-  align-items: start;
-}
-
-@media (min-width: 800px) {
-  .veyah-shots {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
-.veyah-shot {
-  margin: 0;
-}
-
-.veyah-shot--wide {
-  grid-column: 1 / -1;
 }
 
 .why-bubbles {
