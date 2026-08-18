@@ -256,34 +256,36 @@
   featureNext?.addEventListener("click", () => setActiveFeature(featureIndex + 1));
   if (featureTrack && featureSlides.length > 0) setActiveFeature(0);
 
-  document.querySelectorAll("[data-video-open]").forEach((trigger) => {
-    trigger.addEventListener("click", () => {
-      const dialog = document.getElementById(trigger.dataset.videoOpen);
-      if (!dialog || typeof dialog.showModal !== "function") return;
-      const video = dialog.querySelector("video");
-      dialog.showModal();
-      if (video) {
-        video.currentTime = 0;
-        const play = video.play();
-        if (play && typeof play.catch === "function") play.catch(() => {});
-      }
-    });
-  });
+  const enterVideoFullscreen = (video) => {
+    if (typeof video.requestFullscreen === "function") {
+      return video.requestFullscreen();
+    }
+    if (typeof video.webkitRequestFullscreen === "function") {
+      return video.webkitRequestFullscreen();
+    }
+    if (typeof video.webkitEnterFullscreen === "function") {
+      video.webkitEnterFullscreen();
+    }
+    return undefined;
+  };
 
-  document.querySelectorAll(".video-dialog").forEach((dialog) => {
-    const video = dialog.querySelector("video");
-    const stop = () => {
+  document.querySelectorAll("[data-video-fullscreen]").forEach((trigger) => {
+    trigger.addEventListener("click", () => {
+      const video = document.getElementById(trigger.dataset.videoFullscreen);
       if (!video) return;
-      video.pause();
-      video.currentTime = 0;
-    };
-    dialog.querySelectorAll("[data-video-close]").forEach((btn) => {
-      btn.addEventListener("click", () => dialog.close());
+      const play = video.play();
+      const goFullscreen = () => {
+        const fullscreen = enterVideoFullscreen(video);
+        if (fullscreen && typeof fullscreen.catch === "function") {
+          fullscreen.catch(() => {});
+        }
+      };
+      if (play && typeof play.then === "function") {
+        play.then(goFullscreen).catch(goFullscreen);
+        return;
+      }
+      goFullscreen();
     });
-    dialog.addEventListener("click", (event) => {
-      if (event.target === dialog) dialog.close();
-    });
-    dialog.addEventListener("close", stop);
   });
 
   initReveal();

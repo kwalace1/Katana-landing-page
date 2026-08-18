@@ -55,17 +55,13 @@
           <p class="section-lede">Enterprise data translation. Every system speaks a different language. VEYAH helps them understand each other. The product is in build — watch the walkthrough, then talk to us about what’s coming.</p>
           <div class="hero-actions">
             <a class="btn btn-primary" href="/contact?product=veyah">Talk to us</a>
-            <button class="btn btn-ghost" type="button" data-video-open="veyah-demo">Watch the demo</button>
+            <button class="btn btn-ghost" type="button" data-video-fullscreen="veyah-demo-inline">Watch the demo</button>
           </div>
         </div>
-        <figure class="media-frame media-frame--app">
-          <button class="play-poster" type="button" data-video-open="veyah-demo" aria-label="Watch the VEYAH demo">
-            <img src="/veyah-hub.jpg" width="1400" height="1296" alt="VEYAH hub — Translate anything. Salesforce to HubSpot, or drop a file." decoding="async">
-            <span class="play-poster__mark" aria-hidden="true">
-              <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor"><path d="M8 5.14v13.72L19 12 8 5.14z"/></svg>
-            </span>
-            <span class="play-poster__label">Watch the demo</span>
-          </button>
+        <figure class="media-frame media-frame--app media-frame--video">
+          <video id="veyah-demo-inline" poster="/veyah-hub.jpg" controls playsinline preload="metadata" width="1280" height="808" aria-label="VEYAH product demo">
+            <source src="/veyah-demo.mp4" type="video/mp4">
+          </video>
         </figure>
       </section>
 
@@ -170,7 +166,7 @@
         <p>VEYAH isn’t open to the public yet. Watch the walkthrough, then tell us what you’re migrating.</p>
         <div class="hero-actions cta-band-actions">
           <a class="btn btn-primary" href="/contact?product=veyah">Talk to us</a>
-          <button class="btn btn-ghost" type="button" data-video-open="veyah-demo">Watch the demo</button>
+          <button class="btn btn-ghost" type="button" data-video-fullscreen="veyah-demo-inline">Watch the demo</button>
         </div>
       </section>
     </main>
@@ -200,16 +196,6 @@
       <p class="footer-copy">© 2026 Katana. Backed by DW Growth and Capital.</p>
     </footer>
   </div>
-  <dialog class="video-dialog" id="veyah-demo" aria-label="VEYAH product demo">
-    <div class="video-dialog-panel">
-      <button class="video-dialog-close" type="button" data-video-close aria-label="Close demo">
-        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
-      </button>
-      <video poster="/veyah-hub.jpg" controls playsinline preload="metadata">
-        <source src="/veyah-demo.mp4" type="video/mp4">
-      </video>
-    </div>
-  </dialog>
   <script src="/js/site.js"></script>
 </body>
 </html>
