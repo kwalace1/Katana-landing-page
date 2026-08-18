@@ -256,6 +256,12 @@
   featureNext?.addEventListener("click", () => setActiveFeature(featureIndex + 1));
   if (featureTrack && featureSlides.length > 0) setActiveFeature(0);
 
+  document.querySelectorAll("video[autoplay]").forEach((video) => {
+    video.muted = true;
+    const play = video.play();
+    if (play && typeof play.catch === "function") play.catch(() => {});
+  });
+
   const enterVideoFullscreen = (video) => {
     if (typeof video.requestFullscreen === "function") {
       return video.requestFullscreen();
