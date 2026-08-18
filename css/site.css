@@ -484,12 +484,17 @@ a {
   margin: 0;
 }
 
+.hero-trust.powered-by {
+  text-transform: none;
+  letter-spacing: 0;
+}
+
 .powered-by span {
   flex: 0 0 auto;
-  font-size: 0.72rem;
+  font-size: 0.78rem;
   font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  text-transform: none;
   color: var(--text-muted);
 }
 
