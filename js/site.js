@@ -159,11 +159,46 @@
     });
   }
 
-  document.querySelectorAll("video[autoplay]").forEach((video) => {
+  const primeVideo = (video) => {
     video.muted = true;
+    video.defaultMuted = true;
+    video.playsInline = true;
+    video.setAttribute("playsinline", "");
+    video.setAttribute("webkit-playsinline", "");
+    video.setAttribute("muted", "");
+  };
+
+  const tryPlayVideo = (video) => {
+    primeVideo(video);
     const play = video.play();
     if (play && typeof play.catch === "function") play.catch(() => {});
+  };
+
+  const playVisibleAutoplayVideos = () => {
+    document.querySelectorAll("video[autoplay]").forEach((video) => {
+      if (video.closest(".feature-card-media")) return;
+      tryPlayVideo(video);
+    });
+  };
+
+  playVisibleAutoplayVideos();
+  document.addEventListener("visibilitychange", () => {
+    if (!document.hidden) playVisibleAutoplayVideos();
   });
+  window.addEventListener("pageshow", playVisibleAutoplayVideos);
+  document.addEventListener("touchstart", playVisibleAutoplayVideos, { once: true, passive: true });
+  if ("IntersectionObserver" in window) {
+    const videoObserver = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        const video = entry.target;
+        if (!(video instanceof HTMLVideoElement)) continue;
+        if (video.closest(".feature-card-media")) continue;
+        tryPlayVideo(video);
+      }
+    }, { threshold: 0.2 });
+    document.querySelectorAll("video[autoplay]").forEach((video) => videoObserver.observe(video));
+  }
 
   const featureTrack = document.querySelector(".feature-track");
   const featureSlides = featureTrack ? Array.from(featureTrack.querySelectorAll(".feature-card")) : [];
@@ -177,9 +212,7 @@
   const FEATURE_IMAGE_AUTO_MS = 5000;
 
   const playFeatureVideo = (video) => {
-    video.muted = true;
-    const playAttempt = video.play();
-    if (playAttempt && typeof playAttempt.catch === "function") playAttempt.catch(() => {});
+    tryPlayVideo(video);
   };
 
   const stopFeatureAutoScroll = () => {
@@ -256,12 +289,6 @@
   featureNext?.addEventListener("click", () => setActiveFeature(featureIndex + 1));
   if (featureTrack && featureSlides.length > 0) setActiveFeature(0);
 
-  document.querySelectorAll("video[autoplay]").forEach((video) => {
-    video.muted = true;
-    const play = video.play();
-    if (play && typeof play.catch === "function") play.catch(() => {});
-  });
-
   const enterVideoFullscreen = (video) => {
     if (typeof video.requestFullscreen === "function") {
       return video.requestFullscreen();
@@ -279,6 +306,7 @@
     trigger.addEventListener("click", () => {
       const video = document.getElementById(trigger.dataset.videoFullscreen);
       if (!video) return;
+      tryPlayVideo(video);
       const play = video.play();
       const goFullscreen = () => {
         const fullscreen = enterVideoFullscreen(video);
