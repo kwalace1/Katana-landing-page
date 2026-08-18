@@ -102,10 +102,11 @@
       if (submit) submit.disabled = true;
       setStatus(status, "Submitting...", null);
       try {
+        const product = waitlistForm.dataset.product || "business";
         const response = await fetch("/api/waitlist", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email }),
+          body: JSON.stringify({ email, product }),
         });
         const data = await response.json().catch(() => ({}));
         if (!response.ok) throw new Error(data.error || "Something went wrong. Please try again.");

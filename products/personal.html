@@ -34,13 +34,13 @@
             <a class="nav-link" href="/products" data-nav="products">Products</a>
             <div class="nav-dropdown">
               <a href="/products/business">Katana Business<span>Connected operations OS</span></a>
-              <a href="/products/veyah">VEYAH<span>Data translation</span></a>
-              <a href="/products/personal">Katana Personal<span>Daily OS</span></a>
+              <a href="/products/veyah">VEYAH<span>Coming soon</span></a>
+              <a href="/products/personal">Katana Personal<span>Early access</span></a>
             </div>
           </div>
           <a class="nav-link" href="/company" data-nav="company">Company</a>
           <a class="nav-link" href="/contact" data-nav="contact">Contact</a>
-          <a class="btn btn-primary header-cta" href="https://katana-personal.vercel.app" rel="noopener noreferrer">Get Personal</a>
+          <a class="btn btn-primary header-cta" href="#join">Request access</a>
         </nav>
       </div>
     </header>
@@ -49,11 +49,16 @@
       <section class="personal-hero">
         <div class="page-hero">
           <p class="crumb"><a href="/">Home</a> / <a href="/products">Products</a> / Personal</p>
+          <p class="pilot-badge"><span class="pilot-badge__dot" aria-hidden="true"></span> Early access — testers in now</p>
           <p class="serif">Your calm daily OS.</p>
           <h1>Plan the day. Do the next thing.</h1>
           <p class="section-lede">Katana Personal is a private daily operating system. It gives you one next step, a guide that already knows your plate, and optional accountability with people you choose. Your life stays on this device until you decide otherwise.</p>
+          <form class="waitlist" id="join" data-product="personal" novalidate>
+            <input type="email" name="email" id="waitlist-email" placeholder="Enter your email" autocomplete="email" required aria-label="Email address">
+            <button class="btn btn-primary" type="submit" id="waitlist-submit">Request early access</button>
+          </form>
+          <p class="form-status" id="waitlist-status" role="status" aria-live="polite" hidden></p>
           <div class="hero-actions">
-            <a class="btn btn-primary" href="https://katana-personal.vercel.app" rel="noopener noreferrer">Get Personal</a>
             <a class="btn btn-ghost" href="/contact?product=personal">Talk to us</a>
           </div>
         </div>
@@ -243,8 +248,8 @@
 
       <section class="cta-band" aria-labelledby="close-title">
         <h2 id="close-title">Run the day, not another list.</h2>
-        <p>Open a space with just a name. Private on this device until you decide otherwise.</p>
-        <a class="btn btn-primary" href="https://katana-personal.vercel.app" rel="noopener noreferrer">Get Personal</a>
+        <p>People are testing it now. Request early access if you want in on the next wave of pilots.</p>
+        <a class="btn btn-primary" href="#join">Request early access</a>
       </section>
     </main>
 
