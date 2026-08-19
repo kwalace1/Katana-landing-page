@@ -75,6 +75,7 @@
           </form>
           <p class="form-status" id="waitlist-status" role="status" aria-live="polite" hidden></p>
           <p class="form-legal">By joining, you agree to our <a href="/privacy">Privacy Policy</a>.</p>
+          <p class="hero-secondary"><a href="#stack-calculator">Compare your software stack →</a></p>
           <p class="section-lede">Projects, HR, customers, workforce, inventory, and investors live in one place — so a hire, a job, a shipment, and a deadline aren’t trapped in separate apps.</p>
         </div>
         <figure class="media-frame">
@@ -89,6 +90,63 @@
           <p>Most growing companies don’t have an operations problem. They have a fragmentation problem. Project work lives in one tool. People live in another. Customers, inventory, field jobs, and investor outreach each get their own login, their own spreadsheet, their own version of the truth.</p>
           <p>Katana Business is a connected operations OS for that company. It is not a bloated ERP that forces every department to adopt everything on day one, and it is not another single-purpose SaaS that you have to stitch together later. It is one workspace with a shared core — a Hub that shows what is happening — and modules you turn on as the business needs them.</p>
           <p>The heart of the product is simple: the company should have one place where work, people, and assets are connected. When someone is hired, the rest of the system can see it. When a project moves, inventory and customers aren’t left behind. When a field job is scheduled, it isn’t a separate universe from the people doing it.</p>
+        </div>
+      </section>
+
+      <section class="section stack-calc-section" id="stack-calculator" aria-labelledby="stack-title">
+        <p class="section-kicker">Compare the stack</p>
+        <h2 class="section-title" id="stack-title">What are you paying to stay fragmented?</h2>
+        <p class="section-lede">Pick the tools your company runs on today. See what a connected Katana Business workspace costs instead — one login, shared data, modules you turn on as you grow.</p>
+
+        <div class="stack-calc">
+          <div class="stack-calc__controls">
+            <div class="stack-calc__block">
+              <h3>Which apps do you use?</h3>
+              <div class="stack-calc__apps" data-stack-apps></div>
+            </div>
+            <div class="stack-calc__block stack-calc__users">
+              <h3>How many users?</h3>
+              <div class="stack-calc__stepper">
+                <button type="button" class="stack-calc__step" data-stack-step="-1" aria-label="Fewer users">−</button>
+                <input type="number" min="1" max="500" value="20" data-stack-users aria-label="Number of users">
+                <button type="button" class="stack-calc__step" data-stack-step="1" aria-label="More users">+</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="stack-calc__results">
+            <div class="stack-calc__panel">
+              <h3>Apps to replace</h3>
+              <p class="stack-calc__empty" data-stack-empty hidden>Select at least one app to compare.</p>
+              <ul class="stack-calc__list" data-stack-replace-list></ul>
+              <p class="stack-calc__line stack-calc__line--total">
+                <span>Total</span>
+                <strong data-stack-replace-total>$0.00 / year</strong>
+              </p>
+            </div>
+
+            <div class="stack-calc__panel stack-calc__panel--katana">
+              <h3>Katana Business</h3>
+              <p class="stack-calc__katana-lede">One connected operations OS — Hub, Projects, Customers, Inventory, Workforce, HR, and more.</p>
+              <p class="stack-calc__line">
+                <span>Pilot pricing</span>
+                <strong>$39/user/mo</strong>
+              </p>
+              <p class="stack-calc__line stack-calc__line--total">
+                <span>Total</span>
+                <strong data-stack-katana-total>$0.00 / year</strong>
+              </p>
+            </div>
+
+            <div class="stack-calc__savings">
+              <p class="stack-calc__savings-label">Your savings</p>
+              <p class="stack-calc__savings-amount" data-stack-savings>$0.00 / year</p>
+              <p class="stack-calc__savings-note">For a fully connected workspace — not a patchwork of logins.</p>
+              <a class="btn btn-primary" href="#join">Join the pilot</a>
+            </div>
+
+            <p class="stack-calc__disclaimer">Illustrative comparison using typical list pricing for comparable tools. Your actual stack may differ. Katana Business is in pilot — pricing shown is introductory.</p>
+          </div>
         </div>
       </section>
 
@@ -339,5 +397,6 @@
     </footer>
   </div>
   <script src="/js/site.js"></script>
+  <script src="/js/stack-calculator.js"></script>
 </body>
 </html>
