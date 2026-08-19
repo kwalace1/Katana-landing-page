@@ -1553,7 +1553,11 @@ a {
 }
 
 .media-frame--video {
-  background: #000;
+  background: #0b0d10;
+}
+
+.media-frame--video video {
+  background: #0b0d10;
 }
 
 .product-card-media--app img,
