@@ -2,7 +2,7 @@
   const root = document.getElementById("stack-calculator");
   if (!root) return;
 
-  const KATANA_PRICE = 39;
+  const KATANA_PRICE = 119;
   const DEFAULT_USERS = 20;
 
   const APPS = [
