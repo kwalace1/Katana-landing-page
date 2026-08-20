@@ -1975,6 +1975,57 @@ a {
   padding-top: clamp(48px, 8vw, 88px);
 }
 
+.stack-value-props {
+  display: grid;
+  gap: 16px;
+  margin-top: clamp(24px, 4vw, 36px);
+}
+
+@media (min-width: 768px) {
+  .stack-value-props {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.stack-value-prop {
+  padding: 20px 22px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+}
+
+.stack-value-prop--katana {
+  border-color: rgba(46, 108, 255, 0.35);
+  background: linear-gradient(180deg, rgba(46, 108, 255, 0.1) 0%, var(--surface) 100%);
+}
+
+.stack-value-prop__label {
+  margin: 0 0 8px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.stack-value-prop--katana .stack-value-prop__label {
+  color: var(--aqua);
+}
+
+.stack-value-prop h3 {
+  margin: 0 0 10px;
+  font-size: clamp(1rem, 0.95rem + 0.4vw, 1.15rem);
+  line-height: 1.25;
+  color: var(--text-heading);
+}
+
+.stack-value-prop p:last-child {
+  margin: 0;
+  font-size: 0.88rem;
+  color: var(--text-body);
+  line-height: 1.55;
+}
+
 .stack-calc {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
@@ -1998,8 +2049,23 @@ a {
 
 .stack-calc__apps {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(108px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
   gap: 10px;
+}
+
+.stack-calc__hint,
+.stack-calc__panel-lede,
+.stack-calc__block-label {
+  margin: -8px 0 14px;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  line-height: 1.45;
+}
+
+.stack-calc__block-label {
+  margin: 0 0 10px;
+  font-weight: 600;
+  color: var(--text-body);
 }
 
 .stack-app {
@@ -2058,6 +2124,60 @@ a {
 
 .stack-app__module {
   font-size: 0.62rem;
+  color: var(--text-muted);
+  line-height: 1.2;
+}
+
+.stack-app__examples {
+  font-size: 0.58rem;
+  color: var(--text-muted);
+  line-height: 1.25;
+  opacity: 0.85;
+}
+
+.stack-calc__tiers {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.stack-tier {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 8px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.02);
+  color: var(--text-heading);
+  cursor: pointer;
+  text-align: center;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.stack-tier:hover {
+  border-color: var(--border-strong);
+}
+
+.stack-tier.is-selected {
+  border-color: var(--zenith-blue);
+  background: rgba(46, 108, 255, 0.12);
+  box-shadow: 0 0 0 1px rgba(46, 108, 255, 0.3);
+}
+
+.stack-tier__name {
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.stack-tier__price {
+  font-size: 0.68rem;
+  color: var(--aqua);
+}
+
+.stack-tier__note {
+  font-size: 0.58rem;
   color: var(--text-muted);
   line-height: 1.2;
 }
@@ -2245,9 +2365,15 @@ a {
 }
 
 .stack-calc__savings-note {
-  margin: 0 0 18px;
+  margin: 0 0 8px;
   font-size: 0.88rem;
   color: var(--text-body);
+}
+
+.stack-calc__savings-pct {
+  margin: 0 0 18px;
+  font-size: 0.82rem;
+  color: var(--aqua);
 }
 
 .stack-calc__disclaimer {
@@ -2265,6 +2391,10 @@ a {
 
 @media (max-width: 520px) {
   .stack-calc__apps {
-    grid-template-columns: repeat(auto-fill, minmax(92px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  }
+
+  .stack-calc__tiers {
+    grid-template-columns: 1fr;
   }
 }
