@@ -4,64 +4,79 @@
 
   const DEFAULT_USERS = 20;
 
-  const MODULES = [
+  const MODULES = {
+    projects: { name: "Projects", price: 17.5 },
+    inventory: { name: "Inventory", price: 48.41 },
+    hr: { name: "HR", price: 13.25 },
+    workforce: { name: "Workforce", price: 52.25 },
+    customers: { name: "Customers", price: 70.6 },
+    finance: { name: "Finance", price: 65.32 },
+  };
+
+  const TOOL_GROUPS = [
     {
-      id: "projects",
-      name: "Projects",
-      price: 17.5,
-      examples: "Asana, ClickUp, Smartsheet",
-      color: "#F06A6A",
-      abbr: "PM",
+      moduleId: "projects",
+      tools: [
+        { id: "asana", name: "Asana", color: "#F06A6A", abbr: "As" },
+        { id: "clickup", name: "ClickUp", color: "#7B68EE", abbr: "Cu" },
+        { id: "smartsheet", name: "Smartsheet", color: "#0073E6", abbr: "Sm" },
+        { id: "monday", name: "Monday", color: "#6161FF", abbr: "Mo" },
+        { id: "jira", name: "Jira", color: "#0052CC", abbr: "Ji" },
+      ],
     },
     {
-      id: "inventory",
-      name: "Inventory",
-      price: 48.41,
-      examples: "Cin7, Fishbowl, Sortly",
-      color: "#1B75BC",
-      abbr: "Inv",
+      moduleId: "inventory",
+      tools: [
+        { id: "cin7", name: "Cin7", color: "#E31837", abbr: "C7" },
+        { id: "fishbowl", name: "Fishbowl", color: "#1B75BC", abbr: "FB" },
+        { id: "sortly", name: "Sortly", color: "#FF6B35", abbr: "So" },
+        { id: "inflow", name: "inFlow", color: "#00AEEF", abbr: "iF" },
+      ],
     },
     {
-      id: "hr",
-      name: "HR",
-      price: 13.25,
-      examples: "BambooHR, Gusto, Factorial",
-      color: "#73C41D",
-      abbr: "HR",
+      moduleId: "hr",
+      tools: [
+        { id: "bamboo", name: "BambooHR", color: "#73C41D", abbr: "BH" },
+        { id: "gusto", name: "Gusto", color: "#F45D48", abbr: "Gu" },
+        { id: "factorial", name: "Factorial", color: "#FF4F00", abbr: "Fa" },
+      ],
     },
     {
-      id: "workforce",
-      name: "Workforce",
-      price: 52.25,
-      examples: "Homebase, Deputy, Connecteam",
-      color: "#0D3B66",
-      abbr: "WF",
+      moduleId: "workforce",
+      tools: [
+        { id: "homebase", name: "Homebase", color: "#7C3AED", abbr: "Hb" },
+        { id: "deputy", name: "Deputy", color: "#6366F1", abbr: "De" },
+        { id: "connecteam", name: "Connecteam", color: "#2563EB", abbr: "Ct" },
+        { id: "servicetitan", name: "ServiceTitan", color: "#0D3B66", abbr: "ST" },
+      ],
     },
     {
-      id: "customers",
-      name: "Customers",
-      price: 70.6,
-      examples: "Salesforce, HubSpot, Pipedrive",
-      color: "#00A1E0",
-      abbr: "CRM",
+      moduleId: "customers",
+      tools: [
+        { id: "salesforce", name: "Salesforce", color: "#00A1E0", abbr: "SF" },
+        { id: "hubspot", name: "HubSpot", color: "#FF7A59", abbr: "HS" },
+        { id: "pipedrive", name: "Pipedrive", color: "#017737", abbr: "Pd" },
+        { id: "zendesk", name: "Zendesk", color: "#03363D", abbr: "Ze" },
+      ],
     },
     {
-      id: "finance",
-      name: "Finance",
-      price: 65.32,
-      examples: "QuickBooks, Xero, FreshBooks",
-      color: "#2CA01C",
-      abbr: "Fin",
+      moduleId: "finance",
+      tools: [
+        { id: "quickbooks", name: "QuickBooks", color: "#2CA01C", abbr: "QB" },
+        { id: "xero", name: "Xero", color: "#13B5EA", abbr: "Xe" },
+        { id: "freshbooks", name: "FreshBooks", color: "#0075DD", abbr: "FB" },
+        { id: "sage", name: "Sage", color: "#00D639", abbr: "Sa" },
+      ],
     },
   ];
 
   const TIERS = [
-    { id: "core", name: "Core Ops", price: 59, note: "Entry plan" },
-    { id: "growth", name: "Growth", price: 89, note: "Default SMB plan" },
-    { id: "operator", name: "Operator", price: 119, note: "Full-platform plan" },
+    { id: "core", name: "Core Ops", price: 59, note: "Entry" },
+    { id: "growth", name: "Growth", price: 89, note: "SMB default" },
+    { id: "operator", name: "Operator", price: 119, note: "Full platform" },
   ];
 
-  const DEFAULT_MODULE_IDS = new Set(MODULES.map((module) => module.id));
+  const DEFAULT_TOOL_IDS = new Set(["asana", "salesforce", "bamboo", "quickbooks", "fishbowl", "deputy"]);
   let tierId = "operator";
 
   const formatMoney = (amount) =>
@@ -72,10 +87,15 @@
       maximumFractionDigits: 2,
     }).format(amount);
 
-  const selected = new Set(DEFAULT_MODULE_IDS);
+  const allTools = () =>
+    TOOL_GROUPS.flatMap((group) =>
+      group.tools.map((tool) => ({ ...tool, moduleId: group.moduleId }))
+    );
+
+  const selected = new Set(DEFAULT_TOOL_IDS);
   let users = DEFAULT_USERS;
 
-  const moduleGrid = root.querySelector("[data-stack-modules]");
+  const toolGrid = root.querySelector("[data-stack-tools]");
   const tierPicker = root.querySelector("[data-stack-tiers]");
   const userInput = root.querySelector("[data-stack-users]");
   const replaceList = root.querySelector("[data-stack-replace-list]");
@@ -87,33 +107,53 @@
   const savingsAmount = root.querySelector("[data-stack-savings]");
   const savingsPct = root.querySelector("[data-stack-savings-pct]");
   const emptyState = root.querySelector("[data-stack-empty]");
+  const moduleCountEl = root.querySelector("[data-stack-module-count]");
 
   const activeTier = () => TIERS.find((tier) => tier.id === tierId) || TIERS[2];
 
-  const renderModules = () => {
-    moduleGrid.innerHTML = MODULES.map((module) => {
-      const isOn = selected.has(module.id);
+  const activeModules = () => {
+    const moduleIds = new Set();
+    allTools()
+      .filter((tool) => selected.has(tool.id))
+      .forEach((tool) => moduleIds.add(tool.moduleId));
+    return [...moduleIds];
+  };
+
+  const renderTools = () => {
+    toolGrid.innerHTML = TOOL_GROUPS.map((group) => {
+      const module = MODULES[group.moduleId];
+      const tiles = group.tools
+        .map((tool) => {
+          const isOn = selected.has(tool.id);
+          return `
+            <button
+              class="stack-tool${isOn ? " is-selected" : ""}"
+              type="button"
+              data-tool-id="${tool.id}"
+              aria-pressed="${isOn ? "true" : "false"}"
+              title="${tool.name} · ${module.name}"
+            >
+              <span class="stack-tool__icon" style="background:${tool.color}">${tool.abbr}</span>
+              <span class="stack-tool__name">${tool.name}</span>
+            </button>
+          `;
+        })
+        .join("");
+
       return `
-        <button
-          class="stack-app${isOn ? " is-selected" : ""}"
-          type="button"
-          data-module-id="${module.id}"
-          aria-pressed="${isOn ? "true" : "false"}"
-        >
-          <span class="stack-app__icon" style="background:${module.color}">${module.abbr}</span>
-          <span class="stack-app__name">${module.name}</span>
-          <span class="stack-app__module">${formatMoney(module.price)}/user/mo avg.</span>
-          <span class="stack-app__examples">${module.examples}</span>
-        </button>
+        <div class="stack-calc__group">
+          <p class="stack-calc__group-label">${module.name}</p>
+          <div class="stack-calc__group-grid">${tiles}</div>
+        </div>
       `;
     }).join("");
 
-    moduleGrid.querySelectorAll("[data-module-id]").forEach((btn) => {
+    toolGrid.querySelectorAll("[data-tool-id]").forEach((btn) => {
       btn.addEventListener("click", () => {
-        const id = btn.dataset.moduleId;
+        const id = btn.dataset.toolId;
         if (selected.has(id)) selected.delete(id);
         else selected.add(id);
-        renderModules();
+        renderTools();
         renderTotals();
       });
     });
@@ -130,8 +170,7 @@
           aria-pressed="${isOn ? "true" : "false"}"
         >
           <span class="stack-tier__name">${tier.name}</span>
-          <span class="stack-tier__price">${formatMoney(tier.price)}/user/mo</span>
-          <span class="stack-tier__note">${tier.note}</span>
+          <span class="stack-tier__price">${formatMoney(tier.price)}</span>
         </button>
       `;
     }).join("");
@@ -146,8 +185,9 @@
   };
 
   const renderTotals = () => {
-    const chosen = MODULES.filter((module) => selected.has(module.id));
-    const monthlyPerUser = chosen.reduce((sum, module) => sum + module.price, 0);
+    const moduleIds = activeModules();
+    const chosenTools = allTools().filter((tool) => selected.has(tool.id));
+    const monthlyPerUser = moduleIds.reduce((sum, id) => sum + MODULES[id].price, 0);
     const tier = activeTier();
     const fragmentedYear = monthlyPerUser * users * 12;
     const katanaYear = tier.price * users * 12;
@@ -156,8 +196,9 @@
 
     katanaTierName.textContent = tier.name;
     katanaTierPrice.textContent = `${formatMoney(tier.price)}/user/mo`;
+    if (moduleCountEl) moduleCountEl.textContent = String(moduleIds.length);
 
-    if (chosen.length === 0) {
+    if (moduleIds.length === 0) {
       emptyState.hidden = false;
       replaceList.innerHTML = "";
       replacePerUser.textContent = formatMoney(0);
@@ -169,15 +210,20 @@
     }
 
     emptyState.hidden = true;
-    replaceList.innerHTML = chosen
-      .map(
-        (module) => `
+    replaceList.innerHTML = moduleIds
+      .map((moduleId) => {
+        const module = MODULES[moduleId];
+        const tools = chosenTools
+          .filter((tool) => tool.moduleId === moduleId)
+          .map((tool) => tool.name)
+          .join(", ");
+        return `
           <li>
-            <span>${module.name}<em>${module.examples}</em></span>
+            <span>${tools}<em>${module.name} module avg.</em></span>
             <span>${formatMoney(module.price)}/user/mo</span>
           </li>
-        `
-      )
+        `;
+      })
       .join("");
 
     replacePerUser.textContent = `${formatMoney(monthlyPerUser)}/user/mo`;
@@ -185,7 +231,9 @@
     katanaTotal.textContent = `${formatMoney(katanaYear)} / year`;
     savingsAmount.textContent = `${formatMoney(savings)} / year`;
     savingsPct.textContent =
-      savingsPercent > 0 ? `That is about ${savingsPercent}% less — with one login instead of ${chosen.length}.` : "";
+      savingsPercent > 0
+        ? `${savingsPercent}% less per year — one workspace instead of ${moduleIds.length} separate stacks.`
+        : "";
   };
 
   root.querySelectorAll("[data-stack-step]").forEach((btn) => {
@@ -212,7 +260,7 @@
     });
   }
 
-  renderModules();
+  renderTools();
   renderTiers();
   if (userInput) userInput.value = String(users);
   renderTotals();

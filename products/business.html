@@ -98,44 +98,35 @@
         <h2 class="section-title" id="stack-title">One connected workspace — not six disconnected logins.</h2>
         <p class="section-lede">Most growing companies run Projects, Inventory, HR, Workforce, Customers, and Finance in separate tools. That fragmented stack averages about <strong>$267/user/month</strong> — before integrations, duplicate entry, and the friction of keeping everything in sync.</p>
 
-        <div class="stack-value-props">
-          <article class="stack-value-prop">
-            <p class="stack-value-prop__label">Fragmented</p>
-            <h3>Six logins. Six bills. Nothing connected.</h3>
-            <p>Project updates live in one app. People in another. Customers, inventory, and finance each get their own login — and their own version of the truth.</p>
-          </article>
-          <article class="stack-value-prop stack-value-prop--katana">
-            <p class="stack-value-prop__label">Connected on Katana</p>
-            <h3>One workspace. Shared data. Modules on the same core.</h3>
-            <p>A hire, a job, a shipment, and a customer record stay linked — not copied between tabs or stuck in a spreadsheet nobody checks.</p>
-          </article>
-        </div>
-
         <div class="stack-calc">
-          <div class="stack-calc__controls">
-            <div class="stack-calc__block">
-              <h3>Which modules run in separate tools today?</h3>
-              <p class="stack-calc__hint">Benchmark averages from comparable standalone products.</p>
-              <div class="stack-calc__apps" data-stack-modules></div>
+          <div class="stack-calc__inputs">
+            <div class="stack-calc__inputs-head">
+              <h3>What tools does your team run on?</h3>
+              <p class="stack-calc__hint">Tap every standalone product you pay for today. We group them by module and compare against Katana on shared data.</p>
             </div>
-            <div class="stack-calc__block stack-calc__users">
-              <h3>How many users?</h3>
+            <div class="stack-calc__tool-scroll" data-stack-tools></div>
+            <div class="stack-calc__users">
+              <h3>How many seats?</h3>
               <div class="stack-calc__stepper">
-                <button type="button" class="stack-calc__step" data-stack-step="-1" aria-label="Fewer users">−</button>
-                <input type="number" min="1" max="500" value="20" data-stack-users aria-label="Number of users">
-                <button type="button" class="stack-calc__step" data-stack-step="1" aria-label="More users">+</button>
+                <button type="button" class="stack-calc__step" data-stack-step="-1" aria-label="Fewer seats">−</button>
+                <input type="number" min="1" max="500" value="20" data-stack-users aria-label="Number of seats">
+                <button type="button" class="stack-calc__step" data-stack-step="1" aria-label="More seats">+</button>
               </div>
             </div>
           </div>
 
-          <div class="stack-calc__results">
-            <div class="stack-calc__panel">
-              <h3>Fragmented stack</h3>
-              <p class="stack-calc__panel-lede">Separate subscriptions. Separate data. Paid per module, per user.</p>
-              <p class="stack-calc__empty" data-stack-empty hidden>Select at least one module to compare.</p>
+          <div class="stack-calc__divider" aria-hidden="true">
+            <span>vs</span>
+          </div>
+
+          <div class="stack-calc__outputs">
+            <div class="stack-calc__panel stack-calc__panel--fragmented">
+              <p class="stack-calc__panel-tag">Fragmented</p>
+              <h3>What you pay across separate tools</h3>
+              <p class="stack-calc__empty" data-stack-empty hidden>Select at least one tool to compare.</p>
               <ul class="stack-calc__list" data-stack-replace-list></ul>
               <p class="stack-calc__line">
-                <span>Per user</span>
+                <span>Per seat</span>
                 <strong data-stack-replace-per-user>$0.00/user/mo</strong>
               </p>
               <p class="stack-calc__line stack-calc__line--total">
@@ -145,15 +136,15 @@
             </div>
 
             <div class="stack-calc__panel stack-calc__panel--katana">
+              <p class="stack-calc__panel-tag stack-calc__panel-tag--katana">Connected</p>
               <h3>Katana Business</h3>
-              <p class="stack-calc__katana-lede">One connected operations OS — Projects, Inventory, HR, Workforce, Customers, Finance, and Hub on shared data.</p>
-              <p class="stack-calc__block-label">Choose a plan</p>
+              <p class="stack-calc__katana-lede"><span data-stack-module-count>6</span> modules on one workspace — shared data, not separate logins.</p>
+              <p class="stack-calc__block-label">Pick your plan</p>
               <div class="stack-calc__tiers" data-stack-tiers></div>
               <p class="stack-calc__line">
-                <span><span data-stack-katana-tier>Operator</span> plan</span>
+                <span><span data-stack-katana-tier>Operator</span></span>
                 <strong data-stack-katana-price>$119.00/user/mo</strong>
               </p>
-              <p class="stack-calc__tier-note">Operator is about 45% of a typical six-module stack — with everything connected.</p>
               <p class="stack-calc__line stack-calc__line--total">
                 <span>Total</span>
                 <strong data-stack-katana-total>$0.00 / year</strong>
@@ -161,14 +152,14 @@
             </div>
 
             <div class="stack-calc__savings">
-              <p class="stack-calc__savings-label">Your savings</p>
+              <p class="stack-calc__savings-label">You could save</p>
               <p class="stack-calc__savings-amount" data-stack-savings>$0.00 / year</p>
-              <p class="stack-calc__savings-note">For one connected workspace — not a patchwork of logins.</p>
+              <p class="stack-calc__savings-note">For one connected workspace — shared data, not a patchwork of tabs.</p>
               <p class="stack-calc__savings-pct" data-stack-savings-pct></p>
               <a class="btn btn-primary" href="#join">Join the pilot</a>
             </div>
 
-            <p class="stack-calc__disclaimer">Fragmented totals use benchmark averages from comparable standalone tools ($267.33/user/mo across all six modules). Katana seat pricing: Core Ops $59, Growth $89, Operator $119 per user/month.</p>
+            <p class="stack-calc__disclaimer">Fragmented totals use module benchmark averages ($267.33/seat/mo across all six modules). Katana list pricing: Core Ops $59, Growth $89, Operator $119 per seat/month.</p>
           </div>
         </div>
       </section>
