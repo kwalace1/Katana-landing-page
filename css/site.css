@@ -509,6 +509,18 @@ a {
   color: var(--text-muted);
 }
 
+.powered-by a {
+  display: inline-flex;
+  flex: 0 1 auto;
+  line-height: 0;
+  opacity: 0.92;
+  transition: opacity 0.2s ease;
+}
+
+.powered-by a:hover {
+  opacity: 1;
+}
+
 .powered-by img {
   display: block;
   height: 36px;
