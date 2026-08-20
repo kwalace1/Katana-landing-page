@@ -1979,6 +1979,7 @@ a {
   display: grid;
   grid-template-columns: minmax(0, 1.05fr) auto minmax(0, 0.95fr);
   gap: 0;
+  align-items: start;
   margin-top: clamp(28px, 4vw, 44px);
   padding: 0;
   background: var(--surface);
@@ -1991,7 +1992,6 @@ a {
 .stack-calc__inputs {
   display: flex;
   flex-direction: column;
-  min-height: 100%;
   padding: clamp(20px, 3vw, 28px);
 }
 
@@ -2013,11 +2013,7 @@ a {
 }
 
 .stack-calc__tool-scroll {
-  flex: 1;
-  overflow: auto;
-  max-height: min(52vh, 520px);
-  padding-right: 4px;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
 }
 
 .stack-calc__group + .stack-calc__group {
@@ -2101,7 +2097,7 @@ a {
 }
 
 .stack-calc__users {
-  margin-top: auto;
+  margin-top: 0;
   padding-top: 16px;
   border-top: 1px solid var(--border);
 }
@@ -2402,10 +2398,6 @@ a {
     border-top: 1px solid var(--border);
     border-bottom: 1px solid var(--border);
     padding: 12px 0;
-  }
-
-  .stack-calc__tool-scroll {
-    max-height: none;
   }
 }
 
