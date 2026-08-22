@@ -10,54 +10,56 @@
       id: "hbr-toggle",
       title: "Harvard Business Review (2022)",
       detail:
-        "Digital workers toggled apps ~1,200×/day; just under 4 hours/week reorienting after switches (~34 min/day).",
+        "Workplace study: digital workers toggled apps ~1,200×/day; just under 4 hours/week reorienting (~34 min/day). Used only to inform our switch-model cap — not a Katana result.",
       url: "https://hbr.org/2022/08/how-much-time-and-energy-do-we-waste-toggling-between-applications",
     },
     {
       id: "qatalog",
       title: "Qatalog × Cornell Workgeist (2021)",
       detail:
-        "Professionals reported ~36 min/day switching between apps and ~59 min/day searching across tools.",
+        "Workplace survey reporting: ~36 min/day switching between apps and ~59 min/day searching across tools. Informs our 36 min/day switch-model cap — not an endorsement.",
       url: "https://venturebeat.com/business/qatalog-people-waste-59-minutes-every-day-trying-to-find-data-in-apps",
     },
     {
       id: "harvey-food",
       title: "Harvey et al., Obesity (2019)",
       detail:
-        "Electronic food diary self-monitoring averaged 23.2 min/day in month 1 and 14.6 min/day by month 6 (UVM / South Carolina).",
+        "Weight-loss program food diaries: 23.2 min/day in month 1, 14.6 min/day by month 6 (UVM / South Carolina). We use ~15 min for Wellness logging.",
       url: "https://doi.org/10.1002/oby.22382",
     },
     {
       id: "semrush-gpt",
       title: "Semrush (ChatGPT visit duration)",
-      detail: "Average ChatGPT web session ~12–15 minutes; we use 13 min for a typical Ask/AI session.",
+      detail:
+        "Reported average ChatGPT web visit ~12–15 minutes. We use 13 min for an Ask/AI category session. Secondary summary linked; figures are traffic analytics, not a Katana study.",
       url: "https://explodingtopics.com/blog/chatgpt-users",
     },
     {
       id: "chi-tasks",
       title: "ACM CHI task-management survey (2024)",
       detail:
-        "Most respondents track tasks 2–3×/day. We count ~3–4 min per check-in ≈ 10 min/day for Today & tasks.",
+        "Most respondents track tasks 2–3×/day. We model ~3–4 min per check-in ≈ 10 min/day for Today & tasks.",
       url: "https://doi.org/10.1145/3663384.3663402",
     },
     {
       id: "chi-social",
       title: "ACM CHI Social Journal study",
-      detail: "Participants spent ~8.4 min/day in a social journaling / check-in app.",
+      detail:
+        "Study participants spent ~8.4 min/day in a social journaling / check-in app. Applied to Habits and Together categories.",
       url: "https://doi.org/10.1145/3613904.3642411",
     },
     {
       id: "journal-range",
       title: "Journaling session norms",
       detail:
-        "Written journaling sessions commonly land in the 10–20 min range; we use 12 min for Notes & plans.",
+        "Industry summaries often place written journaling in a 10–20 min session range; we use 12 min for Notes & plans. Not a controlled trial of Katana.",
       url: "https://getdailyvox.com/voice-journaling-statistics",
     },
     {
       id: "fitness-est",
-      title: "Fitness logging estimate",
+      title: "Fitness logging estimate (Katana model)",
       detail:
-        "Peer-reviewed daily averages for lift-logging apps are scarce. We use ~6 min (about 1 min × 5–6 exercises between sets) and label it as an estimate.",
+        "Peer-reviewed daily averages for lift-logging apps are scarce. We use ~6 min (about 1 min × 5–6 exercises between sets) as our own estimate — not a published study average.",
       url: null,
     },
   ];
@@ -74,8 +76,9 @@
   };
 
   /**
-   * Multi-app switch overhead: conservative 5 min per extra app, capped at 36 min/day
-   * (Qatalog switching figure). Grounded also by HBR ~34 min/day toggle reorientation.
+   * Multi-app switch model: 5 min per extra app, capped at 36 min/day.
+   * Cap informed by Qatalog (~36 min/day switching) and HBR (~34 min/day reorientation)
+   * workplace findings — adapted into this calculator; not those studies' conclusions about Katana.
    */
   const SWITCH_TAX = {
     minutesPerExtraApp: 5,
@@ -436,9 +439,10 @@
       toolList.innerHTML = `
         <div class="stack-cut__module">
           <p class="stack-cut__time-basis">
-            Time basis: ~${cat.minutes}m/day for ${cat.label}
-            ${src ? ` · ${src.title}` : ""}
+            Est. time basis: ~${cat.minutes}m/day for ${cat.label}
+            ${src ? ` · adapted from ${src.title}` : ""}
             ${group.tools.some((t) => t.diy) ? ` · Free DIY uses ${Math.round(DIY_TIME_FACTOR * 100 - 100)}% more` : ""}
+            · illustrative, not proven
           </p>
           <div class="stack-cut__rows">
             ${group.tools
@@ -534,12 +538,12 @@
       }
       if (toolCountEl) toolCountEl.textContent = String(chosen.length);
 
-      if (timeKatana) timeKatana.textContent = `${katanaMinutes} min / day`;
+      if (timeKatana) timeKatana.textContent = `~${katanaMinutes} min / day`;
       if (timeKatanaSub) {
         timeKatanaSub.textContent =
           tier.id === "plus"
-            ? "One app · Ask already has context"
-            : "One app · no multi-app switch tax";
+            ? "Model: one app · Ask has context · est."
+            : "Model: one app · no switch add-on · est.";
       }
 
       if (chosen.length === 0) {
@@ -552,7 +556,9 @@
         if (timeScatter) timeScatter.textContent = "0 min / day";
         if (timeScatterSub) timeScatterSub.textContent = "Select apps or free DIY";
         if (timeSavings) timeSavings.textContent = "0";
-        if (savingsPct) savingsPct.textContent = "Select apps — paid or free — to see money and time.";
+        if (savingsPct) {
+          savingsPct.textContent = "Select apps — paid or free — for an illustrative comparison.";
+        }
         return;
       }
 
@@ -567,9 +573,9 @@
           <li>
             <span>
               <strong>${group.moduleName}</strong>
-              <em>${cat.label} · ${picks.join(", ")} · ${src ? src.title : "Estimate"}</em>
+              <em>${cat.label} · ${picks.join(", ")} · adapted from ${src ? src.title : "Katana estimate"}</em>
             </span>
-            <span>~${mins}m/day</span>
+            <span>~${mins}m/day est.</span>
           </li>
         `;
       });
@@ -589,14 +595,14 @@
       replaceList.innerHTML = `
         ${moneyRows.join("")}
         <li class="stack-cut__ledger-rule">
-          <span><strong>Activity time</strong><em>Category averages from published research (once per category)</em></span>
+          <span><strong>Est. activity time</strong><em>Category averages adapted from published studies (once per category)</em></span>
           <span>~${activityMinutes}m</span>
         </li>
         ${categoryRows.join("")}
         <li>
           <span>
-            <strong>Multi-app switch tax</strong>
-            <em>${SWITCH_TAX.minutesPerExtraApp}m × ${Math.max(0, chosen.length - 1)} extra apps · capped at ${SWITCH_TAX.capMinutes}m (HBR / Qatalog)</em>
+            <strong>Est. multi-app switch add-on</strong>
+            <em>${SWITCH_TAX.minutesPerExtraApp}m × ${Math.max(0, chosen.length - 1)} extra apps · capped at ${SWITCH_TAX.capMinutes}m · model informed by workplace switching research (see sources) — not a proven Katana result</em>
           </span>
           <span>~${switchMinutes}m</span>
         </li>
@@ -606,24 +612,24 @@
       replaceTotal.textContent = `${formatMoneyExact(fragmentedYear)} / year`;
       katanaTotal.textContent = `${formatMoneyExact(katanaYear)} / year`;
       savingsAmount.textContent = formatMoneyExact(savings);
-      if (timeScatter) timeScatter.textContent = `${scatterMinutes} min / day`;
+      if (timeScatter) timeScatter.textContent = `~${scatterMinutes} min / day`;
       if (timeScatterSub) {
-        timeScatterSub.textContent = `${activityMinutes}m activity + ${switchMinutes}m switching · ${formatHours(hoursScatteredPerWeek)} hrs/week`;
+        timeScatterSub.textContent = `~${activityMinutes}m activity + ~${switchMinutes}m switching · ~${formatHours(hoursScatteredPerWeek)} hrs/week est.`;
       }
       if (timeSavings) timeSavings.textContent = formatHours(hoursSavedPerYear);
 
       if (savingsPct) {
         const moneyBit =
           monthlyTotal > 0 && savingsPercent > 0
-            ? `${savingsPercent}% less money`
+            ? `~${savingsPercent}% less money on list prices`
             : monthlyTotal === 0
-              ? "No subscription cost"
+              ? "No subscription cost on this stack"
               : "Lean on money";
         const timeBit =
           minutesSavedPerDay > 0
-            ? `${minutesSavedPerDay} min/day back (~${formatHours(hoursSavedPerYear)} hrs/yr)`
-            : "time already close";
-        savingsPct.textContent = `${moneyBit} · ${timeBit} — research-backed activity averages + switch tax vs one daily OS.`;
+            ? `~${minutesSavedPerDay} min/day less in this model (~${formatHours(hoursSavedPerYear)} hrs/yr est.)`
+            : "time already close in this model";
+        savingsPct.textContent = `${moneyBit} · ${timeBit}. Illustrative estimate only — not proven savings; sources do not endorse Katana.`;
       }
     };
 
