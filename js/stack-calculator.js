@@ -1,85 +1,361 @@
 (() => {
-  const root = document.getElementById("stack-calculator");
-  if (!root) return;
-
-  const DEFAULT_USERS = 20;
-
-  const MODULES = {
-    projects: { name: "Projects", price: 17.5 },
-    inventory: { name: "Inventory", price: 48.41 },
-    hr: { name: "HR", price: 13.25 },
-    workforce: { name: "Workforce", price: 52.25 },
-    customers: { name: "Customers", price: 70.6 },
-    finance: { name: "Finance", price: 65.32 },
-  };
-
   const TOOL_GROUPS = [
     {
       moduleId: "projects",
+      moduleName: "Projects",
       tools: [
-        { id: "asana", name: "Asana", color: "#F06A6A", abbr: "As" },
-        { id: "clickup", name: "ClickUp", color: "#7B68EE", abbr: "Cu" },
-        { id: "smartsheet", name: "Smartsheet", color: "#0073E6", abbr: "Sm" },
-        { id: "monday", name: "Monday", color: "#6161FF", abbr: "Mo" },
-        { id: "jira", name: "Jira", color: "#0052CC", abbr: "Ji" },
+        {
+          id: "asana",
+          name: "Asana",
+          plan: "Advanced",
+          model: "per_seat",
+          price: 24.99,
+          color: "#F06A6A",
+          abbr: "As",
+          source: "asana.com/pricing · billed annually",
+        },
+        {
+          id: "clickup",
+          name: "ClickUp",
+          plan: "Business",
+          model: "per_seat",
+          price: 12,
+          color: "#7B68EE",
+          abbr: "Cu",
+          source: "clickup.com/pricing · billed annually",
+        },
+        {
+          id: "smartsheet",
+          name: "Smartsheet",
+          plan: "Business",
+          model: "per_seat",
+          price: 32,
+          color: "#0073E6",
+          abbr: "Sm",
+          source: "Published Business list · billed annually",
+        },
+        {
+          id: "trello",
+          name: "Trello",
+          plan: "Premium",
+          model: "per_seat",
+          price: 10,
+          color: "#0052CC",
+          abbr: "Tr",
+          source: "trello.com/pricing · billed annually",
+        },
+        {
+          id: "zoho-projects",
+          name: "Zoho Projects",
+          plan: "Enterprise",
+          model: "per_seat",
+          price: 10,
+          color: "#E42527",
+          abbr: "ZP",
+          source: "zoho.com/projects/pricing · billed annually",
+        },
       ],
     },
     {
       moduleId: "inventory",
+      moduleName: "Inventory",
       tools: [
-        { id: "cin7", name: "Cin7", color: "#E31837", abbr: "C7" },
-        { id: "fishbowl", name: "Fishbowl", color: "#1B75BC", abbr: "FB" },
-        { id: "sortly", name: "Sortly", color: "#FF6B35", abbr: "So" },
-        { id: "inflow", name: "inFlow", color: "#00AEEF", abbr: "iF" },
+        {
+          id: "cin7",
+          name: "Cin7 Core",
+          plan: "Standard → Advanced",
+          model: "tiered_flat",
+          tiers: [
+            { maxUsers: 5, price: 349, label: "Standard" },
+            { maxUsers: 10, price: 599, label: "Pro" },
+            { maxUsers: Infinity, price: 999, label: "Advanced" },
+          ],
+          color: "#E31837",
+          abbr: "C7",
+          source: "cin7.com/pricing · org monthly",
+        },
+        {
+          id: "inflow",
+          name: "inFlow",
+          plan: "Entrepreneur → Mid-Size",
+          model: "tiered_flat",
+          tiers: [
+            { maxUsers: 2, price: 129, label: "Entrepreneur" },
+            { maxUsers: 5, price: 349, label: "Small Business" },
+            { maxUsers: Infinity, price: 699, label: "Mid-Size" },
+          ],
+          color: "#00AEEF",
+          abbr: "iF",
+          source: "inflowinventory.com · billed annually",
+        },
+        {
+          id: "sortly",
+          name: "Sortly",
+          plan: "Advanced",
+          model: "flat",
+          price: 49,
+          color: "#FF6B35",
+          abbr: "So",
+          source: "sortly.com/pricing · org monthly",
+        },
+        {
+          id: "fishbowl",
+          name: "Fishbowl",
+          plan: "Essentials → Scale",
+          model: "tiered_flat",
+          tiers: [
+            { maxUsers: 2, price: 229, label: "Essentials" },
+            { maxUsers: 5, price: 429, label: "Growth" },
+            { maxUsers: Infinity, price: 729, label: "Scale" },
+          ],
+          color: "#1B75BC",
+          abbr: "FB",
+          source: "fishbowlinventory.com/pricing · billed annually",
+        },
+        {
+          id: "zoho-inventory",
+          name: "Zoho Inventory",
+          plan: "Professional",
+          model: "flat",
+          price: 79,
+          color: "#E42527",
+          abbr: "ZI",
+          source: "zoho.com/inventory/pricing · org monthly",
+        },
       ],
     },
     {
       moduleId: "hr",
+      moduleName: "HR",
       tools: [
-        { id: "bamboo", name: "BambooHR", color: "#73C41D", abbr: "BH" },
-        { id: "gusto", name: "Gusto", color: "#F45D48", abbr: "Gu" },
-        { id: "factorial", name: "Factorial", color: "#FF4F00", abbr: "Fa" },
+        {
+          id: "bamboo",
+          name: "BambooHR",
+          plan: "Elite",
+          model: "per_seat",
+          price: 25,
+          color: "#73C41D",
+          abbr: "BH",
+          source: "bamboohr.com/pricing · per employee",
+        },
+        {
+          id: "gusto",
+          name: "Gusto",
+          plan: "Plus",
+          model: "base_plus_seat",
+          base: 80,
+          perSeat: 12,
+          color: "#F45D48",
+          abbr: "Gu",
+          source: "gusto.com/product/pricing · base + per employee",
+        },
+        {
+          id: "factorial",
+          name: "Factorial",
+          plan: "Core",
+          model: "per_seat",
+          price: 8,
+          color: "#FF4F00",
+          abbr: "Fa",
+          source: "Published Core list · per user",
+        },
+        {
+          id: "zoho-people",
+          name: "Zoho People",
+          plan: "Enterprise",
+          model: "per_seat",
+          price: 7,
+          color: "#E42527",
+          abbr: "ZP",
+          source: "zoho.com/people/pricing · billed annually",
+        },
       ],
     },
     {
       moduleId: "workforce",
+      moduleName: "Workforce",
       tools: [
-        { id: "homebase", name: "Homebase", color: "#7C3AED", abbr: "Hb" },
-        { id: "deputy", name: "Deputy", color: "#6366F1", abbr: "De" },
-        { id: "connecteam", name: "Connecteam", color: "#2563EB", abbr: "Ct" },
-        { id: "servicetitan", name: "ServiceTitan", color: "#0D3B66", abbr: "ST" },
+        {
+          id: "homebase",
+          name: "Homebase",
+          plan: "All-in-One",
+          model: "per_location",
+          price: 96,
+          color: "#7C3AED",
+          abbr: "Hb",
+          source: "homebase.com/pricing · per location (assumes 1)",
+        },
+        {
+          id: "deputy",
+          name: "Deputy",
+          plan: "Pro",
+          model: "per_seat",
+          price: 9,
+          color: "#6366F1",
+          abbr: "De",
+          source: "deputy.com/pricing · per user",
+        },
+        {
+          id: "connecteam",
+          name: "Connecteam",
+          plan: "Operations Expert",
+          model: "flat",
+          price: 99,
+          color: "#2563EB",
+          abbr: "Ct",
+          source: "Published Expert hub list · flat for first ~30 users",
+        },
+        {
+          id: "eni-work",
+          name: "ENI Work",
+          plan: "Listed rate",
+          model: "per_seat",
+          price: 5,
+          color: "#0D3B66",
+          abbr: "EN",
+          source: "Benchmark listed rate · verify with vendor",
+        },
       ],
     },
     {
       moduleId: "customers",
+      moduleName: "Customers",
       tools: [
-        { id: "salesforce", name: "Salesforce", color: "#00A1E0", abbr: "SF" },
-        { id: "hubspot", name: "HubSpot", color: "#FF7A59", abbr: "HS" },
-        { id: "pipedrive", name: "Pipedrive", color: "#017737", abbr: "Pd" },
-        { id: "zendesk", name: "Zendesk", color: "#03363D", abbr: "Ze" },
+        {
+          id: "hubspot",
+          name: "HubSpot Sales Hub",
+          plan: "Professional",
+          model: "per_seat",
+          price: 90,
+          color: "#FF7A59",
+          abbr: "HS",
+          source: "hubspot.com/pricing/sales · billed annually",
+        },
+        {
+          id: "salesforce",
+          name: "Salesforce",
+          plan: "Sales Cloud Pro Suite",
+          model: "per_seat",
+          price: 100,
+          color: "#00A1E0",
+          abbr: "SF",
+          source: "salesforce.com/pricing · billed annually",
+        },
+        {
+          id: "pipedrive",
+          name: "Pipedrive",
+          plan: "Premium",
+          model: "per_seat",
+          price: 59,
+          color: "#017737",
+          abbr: "Pd",
+          source: "pipedrive.com/pricing · billed annually",
+        },
+        {
+          id: "freshsales",
+          name: "Freshsales",
+          plan: "Enterprise",
+          model: "per_seat",
+          price: 59,
+          color: "#E9773A",
+          abbr: "Fr",
+          source: "freshworks.com/freshsales · billed annually",
+        },
+        {
+          id: "zoho-crm",
+          name: "Zoho CRM",
+          plan: "Enterprise",
+          model: "per_seat",
+          price: 40,
+          color: "#E42527",
+          abbr: "ZC",
+          source: "zoho.com/crm/pricing · billed annually",
+        },
       ],
     },
     {
       moduleId: "finance",
+      moduleName: "Finance",
       tools: [
-        { id: "quickbooks", name: "QuickBooks", color: "#2CA01C", abbr: "QB" },
-        { id: "xero", name: "Xero", color: "#13B5EA", abbr: "Xe" },
-        { id: "freshbooks", name: "FreshBooks", color: "#0075DD", abbr: "FB" },
-        { id: "sage", name: "Sage", color: "#00D639", abbr: "Sa" },
+        {
+          id: "quickbooks",
+          name: "QuickBooks Online",
+          plan: "Simple Start → Advanced",
+          model: "tiered_flat",
+          tiers: [
+            { maxUsers: 1, price: 38, label: "Simple Start" },
+            { maxUsers: 3, price: 75, label: "Essentials" },
+            { maxUsers: 5, price: 115, label: "Plus" },
+            { maxUsers: Infinity, price: 275, label: "Advanced" },
+          ],
+          color: "#2CA01C",
+          abbr: "QB",
+          source: "quickbooks.intuit.com/pricing · org monthly",
+        },
+        {
+          id: "xero",
+          name: "Xero",
+          plan: "Established",
+          model: "flat",
+          price: 90,
+          color: "#13B5EA",
+          abbr: "Xe",
+          source: "xero.com/us/pricing-plans · unlimited users",
+        },
+        {
+          id: "freshbooks",
+          name: "FreshBooks",
+          plan: "Premium",
+          model: "base_plus_seat",
+          base: 70,
+          perSeat: 11,
+          seatOffset: 1,
+          color: "#0075DD",
+          abbr: "Fr",
+          source: "freshbooks.com/pricing · base + extra team members",
+        },
+        {
+          id: "sage",
+          name: "Sage Accounting",
+          plan: "Standard (list)",
+          model: "flat",
+          price: 45,
+          color: "#00D639",
+          abbr: "Sa",
+          source: "Published cloud Standard list · org monthly (region varies)",
+        },
+        {
+          id: "zoho-books",
+          name: "Zoho Books",
+          plan: "Professional",
+          model: "flat",
+          price: 50,
+          color: "#E42527",
+          abbr: "ZB",
+          source: "zoho.com/books/pricing · org monthly",
+        },
       ],
     },
   ];
 
   const TIERS = [
-    { id: "core", name: "Core Ops", price: 59, note: "Entry" },
-    { id: "growth", name: "Growth", price: 89, note: "SMB default" },
-    { id: "operator", name: "Operator", price: 119, note: "Full platform" },
+    { id: "core", name: "Core Ops", price: 59 },
+    { id: "growth", name: "Growth", price: 89 },
+    { id: "operator", name: "Operator", price: 119 },
   ];
 
-  const DEFAULT_TOOL_IDS = new Set(["asana", "salesforce", "bamboo", "quickbooks", "fishbowl", "deputy"]);
-  let tierId = "operator";
+  const DEFAULT_TOOL_IDS = ["asana", "salesforce", "bamboo", "quickbooks", "fishbowl", "deputy"];
+  const DEFAULT_USERS = 20;
 
   const formatMoney = (amount) =>
+    new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+      minimumFractionDigits: amount % 1 === 0 ? 0 : 2,
+      maximumFractionDigits: 2,
+    }).format(amount);
+
+  const formatMoneyExact = (amount) =>
     new Intl.NumberFormat("en-US", {
       style: "currency",
       currency: "USD",
@@ -87,181 +363,279 @@
       maximumFractionDigits: 2,
     }).format(amount);
 
-  const allTools = () =>
-    TOOL_GROUPS.flatMap((group) =>
-      group.tools.map((tool) => ({ ...tool, moduleId: group.moduleId }))
-    );
-
-  const selected = new Set(DEFAULT_TOOL_IDS);
-  let users = DEFAULT_USERS;
-
-  const toolGrid = root.querySelector("[data-stack-tools]");
-  const tierPicker = root.querySelector("[data-stack-tiers]");
-  const userInput = root.querySelector("[data-stack-users]");
-  const replaceList = root.querySelector("[data-stack-replace-list]");
-  const replaceTotal = root.querySelector("[data-stack-replace-total]");
-  const replacePerUser = root.querySelector("[data-stack-replace-per-user]");
-  const katanaTotal = root.querySelector("[data-stack-katana-total]");
-  const katanaTierName = root.querySelector("[data-stack-katana-tier]");
-  const katanaTierPrice = root.querySelector("[data-stack-katana-price]");
-  const savingsAmount = root.querySelector("[data-stack-savings]");
-  const savingsPct = root.querySelector("[data-stack-savings-pct]");
-  const emptyState = root.querySelector("[data-stack-empty]");
-  const moduleCountEl = root.querySelector("[data-stack-module-count]");
-
-  const activeTier = () => TIERS.find((tier) => tier.id === tierId) || TIERS[2];
-
-  const activeModules = () => {
-    const moduleIds = new Set();
-    allTools()
-      .filter((tool) => selected.has(tool.id))
-      .forEach((tool) => moduleIds.add(tool.moduleId));
-    return [...moduleIds];
+  const pickTier = (tool, users) => {
+    if (!tool.tiers) return null;
+    return tool.tiers.find((tier) => users <= tier.maxUsers) || tool.tiers[tool.tiers.length - 1];
   };
 
-  const renderTools = () => {
-    toolGrid.innerHTML = TOOL_GROUPS.map((group) => {
-      const module = MODULES[group.moduleId];
-      const tiles = group.tools
+  const monthlyCost = (tool, users) => {
+    switch (tool.model) {
+      case "per_seat":
+        return tool.price * users;
+      case "flat":
+      case "per_location":
+        return tool.price;
+      case "base_plus_seat": {
+        const offset = tool.seatOffset || 0;
+        return tool.base + tool.perSeat * Math.max(0, users - offset);
+      }
+      case "tiered_flat": {
+        const tier = pickTier(tool, users);
+        return tier ? tier.price : 0;
+      }
+      default:
+        return 0;
+    }
+  };
+
+  const modelLabel = (tool) => {
+    switch (tool.model) {
+      case "per_seat":
+        return "Per seat";
+      case "flat":
+        return "Flat monthly";
+      case "per_location":
+        return "Per location";
+      case "base_plus_seat":
+        return "Base + per seat";
+      case "tiered_flat":
+        return "Org plan (by seats)";
+      default:
+        return "Listed";
+    }
+  };
+
+  const rateLabel = (tool) => {
+    switch (tool.model) {
+      case "per_seat":
+        return `${formatMoney(tool.price)}/seat`;
+      case "flat":
+        return `${formatMoney(tool.price)}/mo`;
+      case "per_location":
+        return `${formatMoney(tool.price)}/location`;
+      case "base_plus_seat":
+        return `${formatMoney(tool.base)} + ${formatMoney(tool.perSeat)}/seat`;
+      case "tiered_flat":
+        return `from ${formatMoney(tool.tiers[0].price)}/mo`;
+      default:
+        return "";
+    }
+  };
+
+  const lineRateLabel = (tool, users) => {
+    switch (tool.model) {
+      case "per_seat":
+        return `${formatMoney(tool.price)} × ${users} seats`;
+      case "flat":
+        return `${formatMoney(tool.price)}/mo flat`;
+      case "per_location":
+        return `${formatMoney(tool.price)}/mo · 1 location`;
+      case "base_plus_seat": {
+        const seats = Math.max(0, users - (tool.seatOffset || 0));
+        return `${formatMoney(tool.base)} + ${formatMoney(tool.perSeat)} × ${seats}`;
+      }
+      case "tiered_flat": {
+        const tier = pickTier(tool, users);
+        return `${tier.label} · ${formatMoney(tier.price)}/mo`;
+      }
+      default:
+        return "";
+    }
+  };
+
+  const allTools = () =>
+    TOOL_GROUPS.flatMap((group) =>
+      group.tools.map((tool) => ({
+        ...tool,
+        moduleId: group.moduleId,
+        moduleName: group.moduleName,
+      }))
+    );
+
+  const initStackCut = (root) => {
+    const selected = new Set(DEFAULT_TOOL_IDS);
+    let users = DEFAULT_USERS;
+    let tierId = "operator";
+    const ctaHref = root.dataset.stackCta || "/products/business#join";
+
+    const toolList = root.querySelector("[data-stack-tools]");
+    const tierPicker = root.querySelector("[data-stack-tiers]");
+    const userInput = root.querySelector("[data-stack-users]");
+    const replaceList = root.querySelector("[data-stack-replace-list]");
+    const replaceTotal = root.querySelector("[data-stack-replace-total]");
+    const replaceMonth = root.querySelector("[data-stack-replace-month]");
+    const katanaTotal = root.querySelector("[data-stack-katana-total]");
+    const katanaMonth = root.querySelector("[data-stack-katana-month]");
+    const katanaTierName = root.querySelector("[data-stack-katana-tier]");
+    const katanaTierPrice = root.querySelector("[data-stack-katana-price]");
+    const savingsAmount = root.querySelector("[data-stack-savings]");
+    const savingsPct = root.querySelector("[data-stack-savings-pct]");
+    const emptyState = root.querySelector("[data-stack-empty]");
+    const toolCountEl = root.querySelector("[data-stack-tool-count]");
+    const cta = root.querySelector("[data-stack-cta-link]");
+
+    if (cta) cta.setAttribute("href", ctaHref);
+
+    const activeTier = () => TIERS.find((tier) => tier.id === tierId) || TIERS[2];
+
+    const renderTools = () => {
+      toolList.innerHTML = TOOL_GROUPS.map((group) => {
+        const rows = group.tools
+          .map((tool) => {
+            const isOn = selected.has(tool.id);
+            return `
+              <button
+                class="stack-cut__row${isOn ? " is-on" : ""}"
+                type="button"
+                data-tool-id="${tool.id}"
+                aria-pressed="${isOn ? "true" : "false"}"
+                title="${tool.source}"
+              >
+                <span class="stack-cut__check" aria-hidden="true"></span>
+                <span class="stack-cut__row-main">
+                  <span class="stack-cut__row-name">${tool.name}</span>
+                  <span class="stack-cut__row-plan">${tool.plan}</span>
+                </span>
+                <span class="stack-cut__row-meta">
+                  <span class="stack-cut__row-rate">${rateLabel(tool)}</span>
+                  <span class="stack-cut__row-model">${modelLabel(tool)}</span>
+                </span>
+              </button>
+            `;
+          })
+          .join("");
+
+        return `
+          <div class="stack-cut__module">
+            <div class="stack-cut__module-head">
+              <span class="stack-cut__module-mark"></span>
+              <h3>${group.moduleName}</h3>
+            </div>
+            <div class="stack-cut__rows">${rows}</div>
+          </div>
+        `;
+      }).join("");
+
+      toolList.querySelectorAll("[data-tool-id]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const id = btn.dataset.toolId;
+          if (selected.has(id)) selected.delete(id);
+          else selected.add(id);
+          renderTools();
+          renderTotals();
+        });
+      });
+    };
+
+    const renderTiers = () => {
+      tierPicker.innerHTML = TIERS.map((tier) => {
+        const isOn = tier.id === tierId;
+        return `
+          <button
+            class="stack-cut__tier${isOn ? " is-on" : ""}"
+            type="button"
+            data-tier-id="${tier.id}"
+            aria-pressed="${isOn ? "true" : "false"}"
+          >
+            <span>${tier.name}</span>
+            <strong>${formatMoney(tier.price)}</strong>
+          </button>
+        `;
+      }).join("");
+
+      tierPicker.querySelectorAll("[data-tier-id]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          tierId = btn.dataset.tierId;
+          renderTiers();
+          renderTotals();
+        });
+      });
+    };
+
+    const renderTotals = () => {
+      const chosen = allTools().filter((tool) => selected.has(tool.id));
+      const monthlyTotal = chosen.reduce((sum, tool) => sum + monthlyCost(tool, users), 0);
+      const tier = activeTier();
+      const fragmentedYear = monthlyTotal * 12;
+      const katanaMonthVal = tier.price * users;
+      const katanaYear = katanaMonthVal * 12;
+      const savings = Math.max(0, fragmentedYear - katanaYear);
+      const savingsPercent = monthlyTotal > 0 ? Math.round((savings / fragmentedYear) * 100) : 0;
+
+      if (katanaTierName) katanaTierName.textContent = tier.name;
+      if (katanaTierPrice) katanaTierPrice.textContent = `${formatMoneyExact(tier.price)}/seat/mo`;
+      if (toolCountEl) toolCountEl.textContent = String(chosen.length);
+
+      if (chosen.length === 0) {
+        if (emptyState) emptyState.hidden = false;
+        replaceList.innerHTML = "";
+        if (replaceMonth) replaceMonth.textContent = formatMoneyExact(0);
+        replaceTotal.textContent = `${formatMoneyExact(0)} / year`;
+        if (katanaMonth) katanaMonth.textContent = formatMoneyExact(katanaMonthVal);
+        katanaTotal.textContent = `${formatMoneyExact(katanaYear)} / year`;
+        savingsAmount.textContent = formatMoneyExact(0);
+        if (savingsPct) savingsPct.textContent = "Select tools to see the cut.";
+        return;
+      }
+
+      if (emptyState) emptyState.hidden = true;
+      replaceList.innerHTML = chosen
         .map((tool) => {
-          const isOn = selected.has(tool.id);
+          const month = monthlyCost(tool, users);
           return `
-            <button
-              class="stack-tool${isOn ? " is-selected" : ""}"
-              type="button"
-              data-tool-id="${tool.id}"
-              aria-pressed="${isOn ? "true" : "false"}"
-              title="${tool.name} · ${module.name}"
-            >
-              <span class="stack-tool__icon" style="background:${tool.color}">${tool.abbr}</span>
-              <span class="stack-tool__name">${tool.name}</span>
-            </button>
+            <li>
+              <span>
+                <strong>${tool.name}</strong>
+                <em>${tool.plan} · ${lineRateLabel(tool, users)}</em>
+              </span>
+              <span>${formatMoneyExact(month)}/mo</span>
+            </li>
           `;
         })
         .join("");
 
-      return `
-        <div class="stack-calc__group">
-          <p class="stack-calc__group-label">${module.name}</p>
-          <div class="stack-calc__group-grid">${tiles}</div>
-        </div>
-      `;
-    }).join("");
+      if (replaceMonth) replaceMonth.textContent = formatMoneyExact(monthlyTotal);
+      replaceTotal.textContent = `${formatMoneyExact(fragmentedYear)} / year`;
+      if (katanaMonth) katanaMonth.textContent = formatMoneyExact(katanaMonthVal);
+      katanaTotal.textContent = `${formatMoneyExact(katanaYear)} / year`;
+      savingsAmount.textContent = formatMoneyExact(savings);
+      if (savingsPct) {
+        savingsPct.textContent =
+          savingsPercent > 0
+            ? `${savingsPercent}% less than ${chosen.length} separate subscriptions — for one connected Katana workspace.`
+            : "Your stack is already lean at this seat count.";
+      }
+    };
 
-    toolGrid.querySelectorAll("[data-tool-id]").forEach((btn) => {
+    root.querySelectorAll("[data-stack-step]").forEach((btn) => {
       btn.addEventListener("click", () => {
-        const id = btn.dataset.toolId;
-        if (selected.has(id)) selected.delete(id);
-        else selected.add(id);
-        renderTools();
+        const delta = Number.parseInt(btn.dataset.stackStep, 10);
+        users = Math.min(500, Math.max(1, users + delta));
+        if (userInput) userInput.value = String(users);
         renderTotals();
       });
     });
-  };
 
-  const renderTiers = () => {
-    tierPicker.innerHTML = TIERS.map((tier) => {
-      const isOn = tier.id === tierId;
-      return `
-        <button
-          class="stack-tier${isOn ? " is-selected" : ""}"
-          type="button"
-          data-tier-id="${tier.id}"
-          aria-pressed="${isOn ? "true" : "false"}"
-        >
-          <span class="stack-tier__name">${tier.name}</span>
-          <span class="stack-tier__price">${formatMoney(tier.price)}</span>
-        </button>
-      `;
-    }).join("");
-
-    tierPicker.querySelectorAll("[data-tier-id]").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        tierId = btn.dataset.tierId;
-        renderTiers();
+    if (userInput) {
+      userInput.addEventListener("change", () => {
+        const next = Number.parseInt(userInput.value, 10);
+        users = Number.isFinite(next) ? Math.min(500, Math.max(1, next)) : DEFAULT_USERS;
+        userInput.value = String(users);
         renderTotals();
       });
-    });
-  };
-
-  const renderTotals = () => {
-    const moduleIds = activeModules();
-    const chosenTools = allTools().filter((tool) => selected.has(tool.id));
-    const monthlyPerUser = moduleIds.reduce((sum, id) => sum + MODULES[id].price, 0);
-    const tier = activeTier();
-    const fragmentedYear = monthlyPerUser * users * 12;
-    const katanaYear = tier.price * users * 12;
-    const savings = Math.max(0, fragmentedYear - katanaYear);
-    const savingsPercent = monthlyPerUser > 0 ? Math.round((savings / fragmentedYear) * 100) : 0;
-
-    katanaTierName.textContent = tier.name;
-    katanaTierPrice.textContent = `${formatMoney(tier.price)}/user/mo`;
-    if (moduleCountEl) moduleCountEl.textContent = String(moduleIds.length);
-
-    if (moduleIds.length === 0) {
-      emptyState.hidden = false;
-      replaceList.innerHTML = "";
-      replacePerUser.textContent = formatMoney(0);
-      replaceTotal.textContent = `${formatMoney(0)} / year`;
-      katanaTotal.textContent = `${formatMoney(katanaYear)} / year`;
-      savingsAmount.textContent = `${formatMoney(0)} / year`;
-      savingsPct.textContent = "";
-      return;
+      userInput.addEventListener("input", () => {
+        const next = Number.parseInt(userInput.value, 10);
+        if (!Number.isFinite(next)) return;
+        users = Math.min(500, Math.max(1, next));
+        renderTotals();
+      });
+      userInput.value = String(users);
     }
 
-    emptyState.hidden = true;
-    replaceList.innerHTML = moduleIds
-      .map((moduleId) => {
-        const module = MODULES[moduleId];
-        const tools = chosenTools
-          .filter((tool) => tool.moduleId === moduleId)
-          .map((tool) => tool.name)
-          .join(", ");
-        return `
-          <li>
-            <span>${tools}<em>${module.name} module avg.</em></span>
-            <span>${formatMoney(module.price)}/user/mo</span>
-          </li>
-        `;
-      })
-      .join("");
-
-    replacePerUser.textContent = `${formatMoney(monthlyPerUser)}/user/mo`;
-    replaceTotal.textContent = `${formatMoney(fragmentedYear)} / year`;
-    katanaTotal.textContent = `${formatMoney(katanaYear)} / year`;
-    savingsAmount.textContent = `${formatMoney(savings)} / year`;
-    savingsPct.textContent =
-      savingsPercent > 0
-        ? `${savingsPercent}% less per year — one workspace instead of ${moduleIds.length} separate stacks.`
-        : "";
+    renderTools();
+    renderTiers();
+    renderTotals();
   };
 
-  root.querySelectorAll("[data-stack-step]").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const delta = Number.parseInt(btn.dataset.stackStep, 10);
-      users = Math.min(500, Math.max(1, users + delta));
-      if (userInput) userInput.value = String(users);
-      renderTotals();
-    });
-  });
-
-  if (userInput) {
-    userInput.addEventListener("change", () => {
-      const next = Number.parseInt(userInput.value, 10);
-      users = Number.isFinite(next) ? Math.min(500, Math.max(1, next)) : DEFAULT_USERS;
-      userInput.value = String(users);
-      renderTotals();
-    });
-    userInput.addEventListener("input", () => {
-      const next = Number.parseInt(userInput.value, 10);
-      if (!Number.isFinite(next)) return;
-      users = Math.min(500, Math.max(1, next));
-      renderTotals();
-    });
-  }
-
-  renderTools();
-  renderTiers();
-  if (userInput) userInput.value = String(users);
-  renderTotals();
+  document.querySelectorAll("[data-stack-cut]").forEach(initStackCut);
 })();

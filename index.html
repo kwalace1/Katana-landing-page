@@ -66,7 +66,7 @@
           <p class="hero-lede">Katana is an AI technology and data company. We build operating systems for how companies run, how data moves, and how people get through the day.</p>
           <div class="hero-actions">
             <a class="btn btn-primary" href="/contact">Talk to us</a>
-            <a class="btn btn-ghost" href="#products">Explore products</a>
+            <a class="btn btn-ghost" href="#stack-cut">Run the Stack Cut</a>
           </div>
           <p class="hero-trust powered-by">
             <span>A DW Growth and Capital company</span>
@@ -123,6 +123,78 @@
               <span class="product-card-link">Request early access →</span>
             </div>
           </a>
+        </div>
+      </section>
+
+      <section class="section stack-cut-section" id="stack-cut" data-stack-cut data-stack-cta="/products/business#join" aria-labelledby="stack-cut-title-home">
+        <div class="stack-cut__intro">
+          <p class="section-kicker">Stack Cut</p>
+          <h2 class="section-title" id="stack-cut-title-home">What does fragmentation cost you?</h2>
+          <p class="section-lede">Toggle the tools you pay for today. We price them from public list rates — per seat, flat monthly, or base-plus — then show the cut against Katana Business on one connected workspace.</p>
+        </div>
+
+        <div class="stack-cut">
+          <header class="stack-cut__console">
+            <div class="stack-cut__console-brand">
+              <span class="stack-cut__blade" aria-hidden="true"></span>
+              <div>
+                <p class="stack-cut__console-label">Katana Business</p>
+                <p class="stack-cut__console-title">Fragmentation cost console</p>
+              </div>
+            </div>
+            <div class="stack-cut__console-controls">
+              <div class="stack-cut__seats">
+                <span>Seats</span>
+                <div class="stack-cut__stepper">
+                  <button type="button" data-stack-step="-1" aria-label="Fewer seats">−</button>
+                  <input type="number" min="1" max="500" value="20" data-stack-users aria-label="Number of seats">
+                  <button type="button" data-stack-step="1" aria-label="More seats">+</button>
+                </div>
+              </div>
+              <div class="stack-cut__plan">
+                <span>Katana plan</span>
+                <div class="stack-cut__tiers" data-stack-tiers></div>
+              </div>
+            </div>
+          </header>
+
+          <div class="stack-cut__body">
+            <div class="stack-cut__board">
+              <div class="stack-cut__board-head">
+                <h3>Your scattered stack</h3>
+                <p><span data-stack-tool-count>0</span> tools selected</p>
+              </div>
+              <div class="stack-cut__modules" data-stack-tools></div>
+            </div>
+
+            <aside class="stack-cut__readout" aria-live="polite">
+              <div class="stack-cut__meter stack-cut__meter--scatter">
+                <p class="stack-cut__meter-label">Scattered annual</p>
+                <p class="stack-cut__meter-value" data-stack-replace-total>$0.00 / year</p>
+                <p class="stack-cut__meter-sub"><span data-stack-replace-month>$0.00</span>/mo combined</p>
+              </div>
+              <div class="stack-cut__meter stack-cut__meter--katana">
+                <p class="stack-cut__meter-label">Katana · <span data-stack-katana-tier>Operator</span></p>
+                <p class="stack-cut__meter-value" data-stack-katana-total>$0.00 / year</p>
+                <p class="stack-cut__meter-sub"><span data-stack-katana-price>$119.00/seat/mo</span> · <span data-stack-katana-month>$0.00</span>/mo</p>
+              </div>
+
+              <div class="stack-cut__cut">
+                <p class="stack-cut__cut-label">The cut</p>
+                <p class="stack-cut__cut-amount"><span data-stack-savings>$0.00</span><small>/ year</small></p>
+                <p class="stack-cut__cut-note" data-stack-savings-pct>Select tools to see the cut.</p>
+                <a class="btn btn-primary" data-stack-cta-link href="/products/business#join">Join the Business pilot</a>
+              </div>
+
+              <div class="stack-cut__ledger">
+                <p class="stack-cut__ledger-label">Line items</p>
+                <p class="stack-cut__empty" data-stack-empty hidden>Select at least one tool.</p>
+                <ul class="stack-cut__ledger-list" data-stack-replace-list></ul>
+              </div>
+            </aside>
+          </div>
+
+          <p class="stack-cut__disclaimer">Public list prices for common mid-tier plans (usually annual billing). Flat-rate and per-location tools stay flat — we do not invent a per-seat sticker. Homebase assumes 1 location. Tiered org plans step up with seats. Negotiated contracts may differ. Katana: Core Ops $59 · Growth $89 · Operator $119 per seat/month.</p>
         </div>
       </section>
 
@@ -215,5 +287,6 @@
     </footer>
   </div>
   <script src="/js/site.js"></script>
+  <script src="/js/stack-calculator.js"></script>
 </body>
 </html>
