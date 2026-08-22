@@ -456,9 +456,11 @@
     const selected = new Set(DEFAULT_TOOL_IDS);
     let users = DEFAULT_USERS;
     let tierId = "operator";
+    let activeModule = TOOL_GROUPS[0].moduleId;
     const ctaHref = root.dataset.stackCta || "/products/business#join";
 
     const toolList = root.querySelector("[data-stack-tools]");
+    const tabList = root.querySelector("[data-stack-tabs]");
     const tierPicker = root.querySelector("[data-stack-tiers]");
     const userInput = root.querySelector("[data-stack-users]");
     const replaceList = root.querySelector("[data-stack-replace-list]");
@@ -478,49 +480,77 @@
 
     const activeTier = () => TIERS.find((tier) => tier.id === tierId) || TIERS[2];
 
-    const renderTools = () => {
-      toolList.innerHTML = TOOL_GROUPS.map((group) => {
-        const rows = group.tools
-          .map((tool) => {
-            const isOn = selected.has(tool.id);
-            return `
-              <button
-                class="stack-cut__row${isOn ? " is-on" : ""}"
-                type="button"
-                data-tool-id="${tool.id}"
-                aria-pressed="${isOn ? "true" : "false"}"
-                title="${tool.source}"
-              >
-                <span class="stack-cut__check" aria-hidden="true"></span>
-                <span class="stack-cut__row-main">
-                  <span class="stack-cut__row-name">${tool.name}</span>
-                  <span class="stack-cut__row-plan">${tool.plan}</span>
-                </span>
-                <span class="stack-cut__row-meta">
-                  <span class="stack-cut__row-rate">${rateLabel(tool)}</span>
-                  <span class="stack-cut__row-model">${modelLabel(tool)}</span>
-                </span>
-              </button>
-            `;
-          })
-          .join("");
+    const selectedInModule = (moduleId) =>
+      TOOL_GROUPS.find((group) => group.moduleId === moduleId).tools.filter((tool) =>
+        selected.has(tool.id)
+      ).length;
 
+    const renderTabs = () => {
+      if (!tabList) return;
+      tabList.innerHTML = TOOL_GROUPS.map((group) => {
+        const count = selectedInModule(group.moduleId);
+        const isOn = group.moduleId === activeModule;
         return `
-          <div class="stack-cut__module">
-            <div class="stack-cut__module-head">
-              <span class="stack-cut__module-mark"></span>
-              <h3>${group.moduleName}</h3>
-            </div>
-            <div class="stack-cut__rows">${rows}</div>
-          </div>
+          <button
+            class="stack-cut__tab${isOn ? " is-on" : ""}"
+            type="button"
+            role="tab"
+            aria-selected="${isOn ? "true" : "false"}"
+            data-module-tab="${group.moduleId}"
+          >
+            ${group.moduleName}${count ? `<em>${count}</em>` : ""}
+          </button>
         `;
       }).join("");
+
+      tabList.querySelectorAll("[data-module-tab]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          activeModule = btn.dataset.moduleTab;
+          renderTabs();
+          renderTools();
+        });
+      });
+    };
+
+    const renderTools = () => {
+      const group = TOOL_GROUPS.find((item) => item.moduleId === activeModule) || TOOL_GROUPS[0];
+      toolList.innerHTML = `
+        <div class="stack-cut__module">
+          <div class="stack-cut__rows">
+            ${group.tools
+              .map((tool) => {
+                const isOn = selected.has(tool.id);
+                return `
+                  <button
+                    class="stack-cut__row${isOn ? " is-on" : ""}"
+                    type="button"
+                    data-tool-id="${tool.id}"
+                    aria-pressed="${isOn ? "true" : "false"}"
+                    title="${tool.source}"
+                  >
+                    <span class="stack-cut__check" aria-hidden="true"></span>
+                    <span class="stack-cut__row-main">
+                      <span class="stack-cut__row-name">${tool.name}</span>
+                      <span class="stack-cut__row-plan">${tool.plan}</span>
+                    </span>
+                    <span class="stack-cut__row-meta">
+                      <span class="stack-cut__row-rate">${rateLabel(tool)}</span>
+                      <span class="stack-cut__row-model">${modelLabel(tool)}</span>
+                    </span>
+                  </button>
+                `;
+              })
+              .join("")}
+          </div>
+        </div>
+      `;
 
       toolList.querySelectorAll("[data-tool-id]").forEach((btn) => {
         btn.addEventListener("click", () => {
           const id = btn.dataset.toolId;
           if (selected.has(id)) selected.delete(id);
           else selected.add(id);
+          renderTabs();
           renderTools();
           renderTotals();
         });
@@ -632,6 +662,7 @@
       userInput.value = String(users);
     }
 
+    renderTabs();
     renderTools();
     renderTiers();
     renderTotals();
