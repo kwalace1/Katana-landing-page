@@ -668,5 +668,5 @@
     renderTotals();
   };
 
-  document.querySelectorAll("[data-stack-cut]").forEach(initStackCut);
+  document.querySelectorAll('[data-stack-cut]:not([data-stack-cut="personal"])').forEach(initStackCut);
 })();
