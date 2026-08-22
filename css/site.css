@@ -2355,6 +2355,14 @@ a {
   gap: 8px;
 }
 
+.stack-cut__meters--time {
+  margin-top: 0;
+}
+
+.stack-cut__meters--time .stack-cut__meter-value {
+  font-size: 0.92rem;
+}
+
 .stack-cut__meter {
   padding: 10px 12px;
   border: 1px solid var(--border);
@@ -2447,6 +2455,29 @@ a {
   font-weight: 600;
   letter-spacing: 0;
   color: var(--text-body);
+}
+
+.stack-cut__cut-time {
+  position: relative;
+  z-index: 1;
+  margin: -2px 0 10px;
+  font-size: 1.02rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--aqua);
+}
+
+.stack-cut__cut-time small {
+  margin-left: 2px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  color: var(--text-muted);
+}
+
+.stack-cut--personal .stack-cut__row-model {
+  color: var(--aqua);
+  opacity: 0.92;
 }
 
 .stack-cut__cut-note {

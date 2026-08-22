@@ -1,7 +1,8 @@
 (() => {
   /**
    * Katana Personal Stack Cut — fragmented life apps vs Personal Free / Plus.
-   * Prices are public US list rates (prefer annual effective $/mo when published).
+   * Money: public US list rates (prefer annual effective $/mo when published).
+   * Time: estimated daily admin / context-switch minutes (not the workout or habit itself).
    */
   const TOOL_GROUPS = [
     {
@@ -14,6 +15,7 @@
           plan: "Pro",
           model: "flat",
           price: 5,
+          minutesPerDay: 8,
           source: "todoist.com · $5/mo billed annually",
         },
         {
@@ -22,15 +24,17 @@
           plan: "Premium",
           model: "flat",
           price: 2.99,
+          minutesPerDay: 8,
           source: "Published Premium list · monthly",
         },
         {
-          id: "microsoft-todo",
-          name: "Microsoft To Do",
-          plan: "Free",
+          id: "reminders-diy",
+          name: "Reminders / Notes",
+          plan: "Free DIY",
           model: "flat",
           price: 0,
-          source: "Free tier · limited vs Pro stacks",
+          minutesPerDay: 12,
+          source: "Built-in free lists · higher switch cost",
         },
       ],
     },
@@ -44,6 +48,7 @@
           plan: "Plus",
           model: "flat",
           price: 10,
+          minutesPerDay: 12,
           source: "notion.com/pricing · $10/member/mo",
         },
         {
@@ -52,15 +57,17 @@
           plan: "Personal",
           model: "flat",
           price: 14.99,
+          minutesPerDay: 10,
           source: "Published Personal list · monthly",
         },
         {
-          id: "obsidian-sync",
-          name: "Obsidian Sync",
-          plan: "Sync",
+          id: "notes-diy",
+          name: "Apple Notes / Docs",
+          plan: "Free DIY",
           model: "flat",
-          price: 4,
-          source: "obsidian.md · Sync ~$4/mo billed annually",
+          price: 0,
+          minutesPerDay: 14,
+          source: "Free notes · plans live elsewhere",
         },
       ],
     },
@@ -74,6 +81,7 @@
           plan: "Plus",
           model: "flat",
           price: 20,
+          minutesPerDay: 15,
           source: "openai.com · ChatGPT Plus $20/mo",
         },
         {
@@ -82,15 +90,17 @@
           plan: "Pro",
           model: "flat",
           price: 20,
+          minutesPerDay: 15,
           source: "claude.ai · Pro $20/mo",
         },
         {
-          id: "gemini",
-          name: "Google Gemini",
-          plan: "Google AI Pro",
+          id: "chat-diy",
+          name: "Free chat / journal",
+          plan: "Free DIY",
           model: "flat",
-          price: 19.99,
-          source: "Published Google AI Pro list · monthly",
+          price: 0,
+          minutesPerDay: 22,
+          source: "Re-explain your day each time · no shared context",
         },
       ],
     },
@@ -104,6 +114,7 @@
           plan: "Plus",
           model: "flat",
           price: 9.99,
+          minutesPerDay: 6,
           source: "finchcare.com · Plus $9.99/mo",
         },
         {
@@ -112,15 +123,17 @@
           plan: "Subscription",
           model: "flat",
           price: 4.99,
+          minutesPerDay: 7,
           source: "Published subscription list · monthly",
         },
         {
-          id: "streaks",
-          name: "Streaks",
-          plan: "App Store",
+          id: "habits-diy",
+          name: "Paper / spreadsheet",
+          plan: "Free DIY",
           model: "flat",
-          price: 4.99,
-          source: "One-time app price shown as month-1 estimate",
+          price: 0,
+          minutesPerDay: 9,
+          source: "Free tracking · easy to abandon",
         },
       ],
     },
@@ -134,6 +147,7 @@
           plan: "Premium",
           model: "flat",
           price: 4.99,
+          minutesPerDay: 5,
           source: "Published Premium list · ~$4.99/mo",
         },
         {
@@ -142,15 +156,17 @@
           plan: "Pro",
           model: "flat",
           price: 2.99,
+          minutesPerDay: 5,
           source: "Published Pro list · monthly",
         },
         {
-          id: "fitbod",
-          name: "Fitbod",
-          plan: "Premium",
+          id: "fitness-diy",
+          name: "Notes / Sheets log",
+          plan: "Free DIY",
           model: "flat",
-          price: 12.99,
-          source: "Published Premium list · monthly",
+          price: 0,
+          minutesPerDay: 8,
+          source: "Free workout notes · no day link",
         },
       ],
     },
@@ -164,6 +180,7 @@
           plan: "Premium",
           model: "flat",
           price: 6.67,
+          minutesPerDay: 10,
           source: "Annual Premium effective ~$6.67/mo ($79.99/yr)",
         },
         {
@@ -172,15 +189,17 @@
           plan: "Premium",
           model: "flat",
           price: 14.99,
+          minutesPerDay: 6,
           source: "Published Premium list · monthly",
         },
         {
-          id: "headspace",
-          name: "Headspace",
-          plan: "Premium",
+          id: "wellness-diy",
+          name: "Free food / water log",
+          plan: "Free DIY",
           model: "flat",
-          price: 12.99,
-          source: "Published Premium list · monthly",
+          price: 0,
+          minutesPerDay: 12,
+          source: "Free logging · another app to open",
         },
       ],
     },
@@ -194,6 +213,7 @@
           plan: "Bee Plus",
           model: "flat",
           price: 8,
+          minutesPerDay: 6,
           source: "Published Bee Plus list · from ~$8/mo",
         },
         {
@@ -202,15 +222,17 @@
           plan: "Plus",
           model: "flat",
           price: 6.99,
+          minutesPerDay: 5,
           source: "Published Plus list · monthly",
         },
         {
-          id: "stickk",
-          name: "StickK",
-          plan: "Commitment",
+          id: "together-diy",
+          name: "Group chat",
+          plan: "Free DIY",
           model: "flat",
           price: 0,
-          source: "Free stakes product · $0 list (stakes optional)",
+          minutesPerDay: 10,
+          source: "iMessage / Discord · wins get buried",
         },
       ],
     },
@@ -221,12 +243,14 @@
       id: "free",
       name: "Free",
       price: 0,
+      minutesPerDay: 12,
       note: "Full private day loop",
     },
     {
       id: "plus",
       name: "Plus",
       price: 9.99,
+      minutesPerDay: 10,
       note: "Accountability pack · early-access list estimate",
     },
   ];
@@ -249,10 +273,17 @@
       maximumFractionDigits: 2,
     }).format(amount);
 
-  const monthlyCost = (tool) => (tool.model === "flat" ? tool.price : tool.price);
-  const modelLabel = () => "Per person / mo";
-  const rateLabel = (tool) =>
-    tool.price === 0 ? "Free" : `${formatMoney(tool.price)}/mo`;
+  const formatHours = (hours) => {
+    const rounded = hours >= 10 ? Math.round(hours) : Math.round(hours * 10) / 10;
+    return new Intl.NumberFormat("en-US", {
+      maximumFractionDigits: rounded % 1 === 0 ? 0 : 1,
+    }).format(rounded);
+  };
+
+  const monthlyCost = (tool) => tool.price;
+  const dailyMinutes = (tool) => tool.minutesPerDay || 0;
+  const rateLabel = (tool) => (tool.price === 0 ? "Free" : `${formatMoney(tool.price)}/mo`);
+  const timeLabel = (tool) => `~${dailyMinutes(tool)}m/day`;
 
   const allTools = () =>
     TOOL_GROUPS.flatMap((group) =>
@@ -280,6 +311,11 @@
     const katanaTierPrice = root.querySelector("[data-stack-katana-price]");
     const savingsAmount = root.querySelector("[data-stack-savings]");
     const savingsPct = root.querySelector("[data-stack-savings-pct]");
+    const timeScatter = root.querySelector("[data-stack-time-scatter]");
+    const timeScatterSub = root.querySelector("[data-stack-time-scatter-sub]");
+    const timeKatana = root.querySelector("[data-stack-time-katana]");
+    const timeKatanaSub = root.querySelector("[data-stack-time-katana-sub]");
+    const timeSavings = root.querySelector("[data-stack-time-savings]");
     const emptyState = root.querySelector("[data-stack-empty]");
     const toolCountEl = root.querySelector("[data-stack-tool-count]");
     const cta = root.querySelector("[data-stack-cta-link]");
@@ -343,7 +379,7 @@
                     </span>
                     <span class="stack-cut__row-meta">
                       <span class="stack-cut__row-rate">${rateLabel(tool)}</span>
-                      <span class="stack-cut__row-model">${modelLabel()}</span>
+                      <span class="stack-cut__row-model">${timeLabel(tool)}</span>
                     </span>
                   </button>
                 `;
@@ -394,19 +430,32 @@
     const renderTotals = () => {
       const chosen = allTools().filter((tool) => selected.has(tool.id));
       const monthlyTotal = chosen.reduce((sum, tool) => sum + monthlyCost(tool), 0);
+      const scatterMinutes = chosen.reduce((sum, tool) => sum + dailyMinutes(tool), 0);
       const tier = activeTier();
       const fragmentedYear = monthlyTotal * 12;
       const katanaMonthVal = tier.price;
       const katanaYear = katanaMonthVal * 12;
       const savings = Math.max(0, fragmentedYear - katanaYear);
       const savingsPercent = monthlyTotal > 0 ? Math.round((savings / fragmentedYear) * 100) : 0;
+      const katanaMinutes = tier.minutesPerDay;
+      const minutesSavedPerDay = Math.max(0, scatterMinutes - katanaMinutes);
+      const hoursSavedPerYear = (minutesSavedPerDay * 365) / 60;
+      const hoursScatteredPerWeek = (scatterMinutes * 7) / 60;
 
       if (katanaTierName) katanaTierName.textContent = `Personal ${tier.name}`;
       if (katanaTierPrice) {
         katanaTierPrice.textContent =
-          tier.price === 0 ? "$0/mo · full day loop" : `${formatMoneyExact(tier.price)}/mo · Accountability pack`;
+          tier.price === 0
+            ? `$0/mo · ~${katanaMinutes}m/day loop`
+            : `${formatMoneyExact(tier.price)}/mo · ~${katanaMinutes}m/day`;
       }
       if (toolCountEl) toolCountEl.textContent = String(chosen.length);
+
+      if (timeKatana) timeKatana.textContent = `${katanaMinutes} min / day`;
+      if (timeKatanaSub) {
+        timeKatanaSub.textContent =
+          tier.id === "plus" ? "One loop · Ask already has context" : "One calm day loop";
+      }
 
       if (chosen.length === 0) {
         if (emptyState) emptyState.hidden = false;
@@ -415,7 +464,10 @@
         replaceTotal.textContent = `${formatMoneyExact(0)} / year`;
         katanaTotal.textContent = `${formatMoneyExact(katanaYear)} / year`;
         savingsAmount.textContent = formatMoneyExact(0);
-        if (savingsPct) savingsPct.textContent = "Select apps to see the cut.";
+        if (timeScatter) timeScatter.textContent = "0 min / day";
+        if (timeScatterSub) timeScatterSub.textContent = "Select apps or free DIY";
+        if (timeSavings) timeSavings.textContent = "0";
+        if (savingsPct) savingsPct.textContent = "Select apps — paid or free — to see money and time.";
         return;
       }
 
@@ -423,11 +475,12 @@
       replaceList.innerHTML = chosen
         .map((tool) => {
           const month = monthlyCost(tool);
+          const mins = dailyMinutes(tool);
           return `
             <li>
               <span>
                 <strong>${tool.name}</strong>
-                <em>${tool.plan} · ${tool.source}</em>
+                <em>${tool.plan} · ~${mins}m/day · ${tool.source}</em>
               </span>
               <span>${month === 0 ? "Free" : `${formatMoneyExact(month)}/mo`}</span>
             </li>
@@ -439,11 +492,24 @@
       replaceTotal.textContent = `${formatMoneyExact(fragmentedYear)} / year`;
       katanaTotal.textContent = `${formatMoneyExact(katanaYear)} / year`;
       savingsAmount.textContent = formatMoneyExact(savings);
+      if (timeScatter) timeScatter.textContent = `${scatterMinutes} min / day`;
+      if (timeScatterSub) {
+        timeScatterSub.textContent = `${formatHours(hoursScatteredPerWeek)} hrs/week across ${chosen.length} places`;
+      }
+      if (timeSavings) timeSavings.textContent = formatHours(hoursSavedPerYear);
+
       if (savingsPct) {
-        savingsPct.textContent =
-          savingsPercent > 0
-            ? `${savingsPercent}% less than ${chosen.length} separate life apps — one calm daily OS.`
-            : "Your stack is already lean.";
+        const moneyBit =
+          monthlyTotal > 0 && savingsPercent > 0
+            ? `${savingsPercent}% less money`
+            : monthlyTotal === 0
+              ? "No subscription cost"
+              : "Lean on money";
+        const timeBit =
+          minutesSavedPerDay > 0
+            ? `${minutesSavedPerDay} min/day back (~${formatHours(hoursSavedPerYear)} hrs/yr)`
+            : "time already close";
+        savingsPct.textContent = `${moneyBit} · ${timeBit} — one daily OS instead of ${chosen.length} switches.`;
       }
     };
 
