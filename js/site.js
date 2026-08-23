@@ -1,4 +1,17 @@
 (() => {
+  // Vercel Web Analytics (static HTML / "Other" — no npm package)
+  window.va =
+    window.va ||
+    function () {
+      (window.vaq = window.vaq || []).push(arguments);
+    };
+  if (!document.querySelector('script[src="/_vercel/insights/script.js"]')) {
+    const insights = document.createElement("script");
+    insights.defer = true;
+    insights.src = "/_vercel/insights/script.js";
+    document.head.appendChild(insights);
+  }
+
   const header = document.querySelector(".site-header");
   const navToggle = document.querySelector(".nav-toggle");
   const dropdown = document.querySelector(".nav-item--dropdown");
