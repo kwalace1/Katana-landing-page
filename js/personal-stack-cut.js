@@ -387,7 +387,13 @@
     const cta = root.querySelector("[data-stack-cta-link]");
     const sourcesList = root.querySelector("[data-stack-sources]");
 
-    if (cta) cta.setAttribute("href", ctaHref);
+    if (cta) {
+      cta.setAttribute("href", ctaHref);
+      if (/^https?:\/\//i.test(ctaHref)) {
+        cta.setAttribute("target", "_blank");
+        cta.setAttribute("rel", "noopener noreferrer");
+      }
+    }
 
     if (sourcesList) {
       sourcesList.innerHTML = SOURCES.map((source) => {
