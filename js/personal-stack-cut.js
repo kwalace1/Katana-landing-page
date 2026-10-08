@@ -298,9 +298,10 @@
     {
       id: "plus",
       name: "Plus",
-      price: 9.99,
+      price: 39.99,
+      period: "year",
       minutesPerDay: 10,
-      note: "Accountability pack · early-access list estimate",
+      note: "Accountability pack · $39.99/year on the App Store",
     },
   ];
 
@@ -504,7 +505,7 @@
             title="${tier.note}"
           >
             <span>${tier.name}</span>
-            <strong>${tier.price === 0 ? "Free" : formatMoney(tier.price)}</strong>
+            <strong>${tier.price === 0 ? "Free" : tier.period === "year" ? `${formatMoney(tier.price)}/yr` : formatMoney(tier.price)}</strong>
           </button>
         `;
       }).join("");
@@ -527,7 +528,7 @@
       const scatterMinutes = activityMinutes + switchMinutes;
       const tier = activeTier();
       const fragmentedYear = monthlyTotal * 12;
-      const katanaYear = tier.price * 12;
+      const katanaYear = tier.period === "year" ? tier.price : tier.price * 12;
       const savings = Math.max(0, fragmentedYear - katanaYear);
       const savingsPercent = monthlyTotal > 0 ? Math.round((savings / fragmentedYear) * 100) : 0;
       const katanaMinutes = tier.minutesPerDay;
@@ -540,7 +541,9 @@
         katanaTierPrice.textContent =
           tier.price === 0
             ? `$0/mo · ~${katanaMinutes}m/day loop`
-            : `${formatMoneyExact(tier.price)}/mo · ~${katanaMinutes}m/day`;
+            : tier.period === "year"
+              ? `${formatMoneyExact(tier.price)}/yr · ~${katanaMinutes}m/day`
+              : `${formatMoneyExact(tier.price)}/mo · ~${katanaMinutes}m/day`;
       }
       if (toolCountEl) toolCountEl.textContent = String(chosen.length);
 
