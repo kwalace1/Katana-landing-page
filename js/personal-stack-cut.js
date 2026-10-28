@@ -298,10 +298,9 @@
     {
       id: "plus",
       name: "Plus",
-      price: 39.99,
-      period: "year",
+      price: 4.99,
       minutesPerDay: 10,
-      note: "Accountability pack · $39.99/year on the App Store",
+      note: "Accountability pack · $4.99/mo or $39.99/yr",
     },
   ];
 
